@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <p:dialog showEffect="fade" hideEffect="fade"
+              position="center" id="idDialocActTunda"
+              header="Permohonan Ditunda" appendTo="@(body)"  
+              widgetVar="showDialocActTunda" 
+              modal="true" width="30%"
+              responsive="true" resizable="false" closable="false">
+        <h:form prependId="false">
+                <p:panelGrid columns="1" style="width: 100%" styleClass="ui-panelgrid-blank form-group">
+
+                    <p:outputLabel value="Permohonan telah ditunda dengan alasan #{permohonanWorkflowMBean.application.alasanPenundaan}"/>
+                    <p:outputLabel value="Apakah anda yakin akan melanjutkan permohonan?"/>
+                </p:panelGrid>
+            <p:separator/>
+            <p:panelGrid columns="2" class="no-border" columnClasses="ui-grid-col-10,ui-grid-col-2" style="width: 100%">
+                <p:commandButton value="Ya" actionListener="#{permohonanWorkflowMBean.holdAction('Ya')}"
+                                 process="@form" update="@form" style="float: right"/>
+                <p:commandButton value="Tidak" actionListener="#{permohonanWorkflowMBean.holdAction('Tidak')}"
+                                 process="@form" update="@form" style="float: right"/>
+            </p:panelGrid>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>

@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Izin Tinggal</title>
+        <h:outputScript name="js/layout.js" library="avalon-layout" />
+    </h:head>
+
+    <h:body styleClass="login-body">
+
+        <div class="login-image">
+            <div align="right">
+                <p:graphicImage name="pancasila.png" library="images" style="width: 120px; height: 120px; margin: 10px;"/>
+                <!--<p:graphicImage name="indonesia.png" library="images" style="width: 120px"/>-->            
+            </div>        
+        </div>        
+
+        <div class="card login-panel ui-fluid">
+
+            <div class="login-panel-content no-border" style="background-color: transparent; border-radius: 10px;">
+                <h:form prependId="false">
+                    <div class="ui-g" style="margin: 10px">
+                        <div class="ui-g-12 ui-sm-6 ui-md-6" style="text-align:left;">
+                            <p:graphicImage name="pengayoman-logo.png" library="images" style="width: 80px; margin-right: 5px;"/>
+                            <p:graphicImage name="imigrasi_logo.png" library="images" style="width: 80px; margin-left: 5px;"/>
+                            <!--<p:graphicImage name="images/login/icon-login.svg" library="avalon-layout" />-->
+                        </div>
+                        <div class="ui-g-12 ui-sm-6 ui-md-6" style="text-align:right;">
+                            <h2 class="welcome-text" style="color: white">Selamat Datang</h2>
+                            <span class="guest-sign-in" style="color: white">Aplikasi Penerbitan Izin Tinggal</span>
+                        </div>
+                        <div class="ui-g-12" style="font-size: 1.2em !important; text-align: left;">
+                            <p:outputLabel value="Anda memiliki lebih dari 1 hak akses." /><br/>
+                            <p:outputLabel value="Silahkan memilih hak akses yang akan Anda gunakan." /><br/><br />
+                            <div class="input-wrapper">
+                                <p:selectOneMenu id="list-role" value="#{loginRoleMBean.role}" converter="listConverter" autoWidth="false"
+                                                 required="true" requiredMessage="Hak akses harus dipilih.">
+                                    <f:selectItem itemLabel="#{msg.data_please_select}" itemValue="#{null}" />
+                                    <f:selectItems value="#{loginRoleMBean.listRole}" var="role" 
+                                                   itemLabel="#{role.roleName}" itemValue="#{role}"/>
+                                </p:selectOneMenu>
+                            </div>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="#{loginRoleMBean.errMessage}" style="color: red; font-weight: bold;"
+                                           rendered="#{loginRoleMBean.errMessage != null}" />
+                            <p:commandButton icon="ui-icon-check" value="#{msg.btn_choose}" styleClass="raised-btn" ajax="false"
+                                             style="margin-top: 15px; text-transform: uppercase !important;"
+                                             actionListener="#{loginRoleMBean.confirmRole()}" process="@form" update="@form" />
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+    </h:body>
+
+    <h:outputStylesheet name="css/layout-skyline.css" library="avalon-layout" />
+
+</ui:composition>

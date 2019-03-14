@@ -1,0 +1,232 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="head">
+        <f:event type="preRenderView" listener="#{permohonanWorkflowMBean.redirect()}"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <ui:include src="permohonanTunda.xhtml"/>
+        <p:panelGrid columns="2" class="no-border no-padding" style="width: 100%;" 
+                     columnClasses="ui-grid-col-3 ui-fluid,ui-grid-col-9 ui-fluid">
+
+            <p:fieldset id="workflow-wrapper" legend="Tahapan" class="workflow-wrapper">
+
+                <h:form id="workflow-steps" style="overflow: auto;">
+                    <p:remoteCommand actionListener="#{permohonanWorkflowMBean.showDialoc()}" autoRun="true" 
+                                     process="@this" rendered="#{permohonanWorkflowMBean.application.status == 'HOLD' ? true : false}"/>
+                    <p:panelGrid columns="1" class="no-border no-padding" style="width: 100%;" 
+                                 columnClasses="ui-grid-col-12">
+
+                        <p:steps id="workflow-content" class="workflow ui-g-12 ui-fluid" readonly="false" style="margin-bottom: 20px !important;"
+                                 activeIndex="#{permohonanWorkflowMBean.activeIndex}" 
+                                 model="#{permohonanWorkflowMBean.workflows}"
+                                 rendered="#{permohonanWorkflowMBean.showWorkflows}" />
+
+                        <p:panel class="no-border no-padding" style="margin: 10px 10px 15px 10px !important;"
+                                 rendered="#{!permohonanWorkflowMBean.showWorkflows}">
+                            <p:outputLabel value="Tahapan tidak ditemukan." style="font-weight: bold;" />
+                        </p:panel>
+
+                        <p:separator style="width: 95%;  border: 1px dashed #dddddd;" />
+
+                        <p:panel class="no-border no-padding" style="margin: 15px 10px 15px 10px !important;">
+                            <p:panelGrid columns="2" class="no-border no-padding-table" style="width: 100% !important; font-size: 0.9em !important;"
+                                         columnClasses="ui-grid-col-1 ui-fluid align-top, ui-grid-col-11 ui-fluid align-top">
+
+                                <i class="fa fa-paint-brush workflow-kanim-legend" />
+                                <p:outputLabel class="workflow-kanim-legend" value="Tahapan di Kanim" />
+                                <i class="fa fa-paint-brush workflow-kanwil-legend" />
+                                <p:outputLabel class="workflow-kanwil-legend" value="Tahapan di Kanwil" />
+                                <i class="fa fa-paint-brush workflow-directorate-legend" />
+                                <p:outputLabel class="workflow-directorate-legend" value="Tahapan di Direktorat" />
+                                <i class="fa fa-paint-brush workflow-stop-legend" />
+                                <p:outputLabel class="workflow-stop-legend" value="Tahapan berhenti di sini" />
+                                <i class="fa fa-paint-brush workflow-hold-legend" />
+                                <p:outputLabel class="workflow-hold-legend" value="Tahapan sedang ditangguhkan" />
+                            </p:panelGrid>
+                        </p:panel>
+
+                    </p:panelGrid>
+                </h:form>
+
+            </p:fieldset>
+
+            <p:panel class="no-border no-padding" style="padding-right: 7px !important;">
+                <p:panel class="no-border no-padding workflow-right-wrapper">
+                    <p:commandLink styleClass="top-links align-top" actionListener="#{permohonanWorkflowMBean.openCurrentWorkflow()}"
+                                   style="background-color: #{permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/entryDataIzinTinggal.xhtml') 
+                                                              || permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/pemindaianDokumen.xhtml')
+                                                              || permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/pengambilanDataBiometri.xhtml')
+                                                              || permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/workflow.xhtml')
+                                                              || permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/arsipLayanan.xhtml')
+                                                              || permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/riwayatPerlintasan.xhtml') 
+                                                              || permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/viewBiometric.xhtml') 
+                                                              || permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/viewPemindaian.xhtml') ? 'none' : 'blue'}">
+                        <p:graphicImage name="images/permohonan/ic-monitor.png" />
+                        <p:outputLabel value="TAHAPAN SEKARANG" style="color: #{permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/entryDataIzinTinggal.xhtml') 
+                                                                                || permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/pemindaianDokumen.xhtml')
+                                                                                || permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/pengambilanDataBiometri.xhtml')
+                                                                                || permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/workflow.xhtml')
+                                                                                || permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/arsipLayanan.xhtml')
+                                                                                || permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/riwayatPerlintasan.xhtml') 
+                                                                                || permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/viewBiometric.xhtml')
+                                                                                || permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/viewPemindaian.xhtml')? 'none' : 'white'}"/>
+                    </p:commandLink>
+
+                    <p:commandLink styleClass="top-links align-top" actionListener="#{permohonanWorkflowMBean.openDataPemohon()}"
+                                   style="background-color: #{permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/entryDataIzinTinggal.xhtml') ? 'blue' : 'none'}">
+                        <p:graphicImage name="images/permohonan/ic-userdata.png" />
+                        <p:outputLabel value="DATA PEMOHON" style="color: #{permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/entryDataIzinTinggal.xhtml') ? 'white' : 'none'};"/>
+                    </p:commandLink>
+
+                    <p:commandLink styleClass="top-links align-top" actionListener="#{permohonanWorkflowMBean.openEdokumen()}"
+                                   style="background-color: #{permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/pemindaianDokumen.xhtml') ||
+                                                              permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/viewPemindaian.xhtml') ? 'blue' : 'none'}" >
+                        <p:graphicImage name="images/permohonan/ic-edocs.png" />
+                        <p:outputLabel value="E-DOKUMEN" style="color: #{permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/pemindaianDokumen.xhtml') ||
+                                                                         permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/viewPemindaian.xhtml') ? 'white' : 'none'}"/>
+                    </p:commandLink>
+
+                    <p:commandLink styleClass="top-links align-top" actionListener="#{permohonanWorkflowMBean.openBiometri()}"
+                                   style="background-color: #{permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/pengambilanDataBiometri.xhtml') ||
+                                                              permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/viewBiometric.xhtml') ? 'blue' : 'none'}" >
+                        <p:graphicImage name="images/permohonan/ic-biometrics.png" />
+                        <p:outputLabel value="BIOMETRIK" style="color: #{permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/pengambilanDataBiometri.xhtml') ||
+                                                                         permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/viewBiometric.xhtml') ? 'white' : 'none'}"/>
+                    </p:commandLink>
+
+                    <p:commandLink styleClass="top-links align-top" actionListener="#{permohonanWorkflowMBean.openWorkflow()}"
+                                   style="background-color: #{permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/workflow.xhtml') ? 'blue' : 'none'}" >
+                        <p:graphicImage name="images/permohonan/ic-workflows.png" />
+                        <p:outputLabel value="RIWAYAT TAHAPAN" style="color: #{permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/workflow.xhtml') ? 'white' : 'none'}"/>
+                    </p:commandLink>
+
+                    <p:commandLink styleClass="top-links align-top" actionListener="#{permohonanWorkflowMBean.openArsipLayanan()}"
+                                   style="background-color: #{permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/arsipLayanan.xhtml') ? 'blue' : 'none'}" >
+                        <p:graphicImage name="images/permohonan/ic-archive.png" />
+                        <p:outputLabel value="RIWAYAT PERMOHONAN" style="color: #{permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/arsipLayanan.xhtml') ? 'white' : 'none'}"/>
+                    </p:commandLink>
+
+                    <p:commandLink styleClass="top-links align-top" actionListener="#{permohonanWorkflowMBean.openRiwayatPerlintasan()}"
+                                   style="background-color: #{permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/riwayatPerlintasan.xhtml') ? 'blue' : 'none'}" >
+                        <p:graphicImage name="images/permohonan/ic-arrows.png" />
+                        <p:outputLabel value="RIWAYAT PERLINTASAN" style="color: #{permohonanWorkflowMBean.path.equals('Pelayanan/Permohonan/riwayatPerlintasan.xhtml') ? 'white' : 'none'}"/>
+                    </p:commandLink>
+                    <p:separator style="margin: 10px 0 !important; border: 1px solid #dddddd; opacity: 0.75;" />
+
+                    <p:panelGrid columns="2" class="no-border no-padding-table" style="width: 100% !important; text-align: left !important;"
+                                 columnClasses="ui-grid-col-3 ui-fluid align-top, ui-grid-col-9 ui-fluid align-top">
+                        <p:outputLabel value="Lokasi Permohonan" />
+                        <h:panelGroup>
+                            <p:outputLabel value=": " styleClass="align-top" />
+                            <p:outputLabel value="#{permohonanWorkflowMBean.application.kantorImigrasi != null ? permohonanWorkflowMBean.application.kantorImigrasi : '-'}"
+                                           styleClass="capitalized content-bold align-top" />
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Nomor Permohonan" />
+                        <h:panelGroup>
+                            <p:outputLabel value=": " styleClass="align-top" />
+                            <p:outputLabel value="#{permohonanWorkflowMBean.application.noPermohonan != null ? permohonanWorkflowMBean.application.noPermohonan : '-'}"
+                                           styleClass="capitalized content-bold align-top" />
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Tanggal Permohonan" />
+                        <h:panelGroup>
+                            <p:outputLabel value=": " styleClass="align-top" />
+                            <p:outputLabel value="#{viewBean.convertDateToString(permohonanWorkflowMBean.application.tglPermohonan)}"
+                                           styleClass="capitalized content-bold align-top" />
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Nama Layanan" />
+                        <h:panelGroup>
+                            <p:outputLabel value=": " styleClass="align-top" />
+                            <p:outputLabel value="#{permohonanWorkflowMBean.application.namaLayanan != null ? permohonanWorkflowMBean.application.namaLayanan : '-'}"
+                                           styleClass="capitalized content-bold align-top" />
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Nama Pemohon" />
+                        <h:panelGroup>
+                            <p:outputLabel value=": " styleClass="align-top" />
+                            <p:outputLabel value="#{permohonanWorkflowMBean.application.namaPemohon != null ? permohonanWorkflowMBean.application.namaPemohon : '-'}"
+                                           styleClass="capitalized content-bold align-top" />
+                        </h:panelGroup>
+
+                        <p:outputLabel value="NIORA" rendered="#{permohonanWorkflowMBean.application.layananId.kategoriId.kategoriid == 325 ? false : true}"/>
+                        <h:panelGroup rendered="#{permohonanWorkflowMBean.application.layananId.kategoriId.kategoriid == 325 ? false : true}">
+                            <p:outputLabel value=": " styleClass="align-top" />
+                            <p:outputLabel value="#{entryDataIzinTinggalMBean.permohonan.niora != null ? entryDataIzinTinggalMBean.permohonan.niora : '-'}"
+                                           styleClass="capitalized content-bold align-top" />
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Tanggal Lahir" rendered="#{permohonanWorkflowMBean.application.layananId.kategoriId.kategoriid == 325 ? false : true}"/>
+                        <h:panelGroup rendered="#{permohonanWorkflowMBean.application.layananId.kategoriId.kategoriid == 325 ? false : true}">
+                            <p:outputLabel value=": " styleClass="align-top" />
+                            <p:outputLabel value="#{viewBean.convertDateToString(permohonanWorkflowMBean.application.tglLahir)}"
+                                           styleClass="capitalized content-bold align-top" />
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Nama Penjamin" />
+                        <h:panelGroup>
+                            <p:outputLabel value=": " styleClass="align-top" />
+                            <p:outputLabel value="#{permohonanWorkflowMBean.application.sponsorNama != null ? permohonanWorkflowMBean.application.sponsorNama : '-'}"
+                                           styleClass="capitalized content-bold align-top" />
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Nama Pengurus" />
+                        <h:panelGroup>
+                            <p:outputLabel value=": " styleClass="align-top" />
+                            <p:outputLabel value="#{permohonanWorkflowMBean.pengurus != null ? permohonanWorkflowMBean.pengurus.namaPengurus : '-'}"
+                                           styleClass="capitalized content-bold align-top" />
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Nama Biro Jasa" />
+                        <h:panelGroup>
+                            <p:outputLabel value=": " styleClass="align-top" />
+                            <p:outputLabel value="#{permohonanWorkflowMBean.pengurus != null ? permohonanWorkflowMBean.pengurus.namaBiroJasa : '-'}"
+                                           styleClass="capitalized content-bold align-top" />
+                        </h:panelGroup>
+
+                    </p:panelGrid>
+
+                    <p:separator style="margin: 10px 0 !important; border: 1px solid #dddddd; opacity: 0.75;" rendered="#{permohonanWorkflowMBean.directorate}"/>
+
+                    <p:panelGrid columns="2" class="no-border no-padding-table" style="width: 100% !important; text-align: left !important;"
+                                 columnClasses="ui-grid-col-3 ui-fluid align-top, ui-grid-col-9 ui-fluid align-top" rendered="#{permohonanWorkflowMBean.directorate}">
+
+                        <p:outputLabel value="No. SK" />
+                        <h:panelGroup>
+                            <p:outputLabel value=": " styleClass="align-top" />
+                            <p:outputLabel value="#{permohonanWorkflowMBean.application.noSkDitjenim}"
+                                           styleClass="capitalized content-bold align-top" /> 
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Tanggal Keputusan" />
+                        <h:panelGroup>
+                            <p:outputLabel value=": " styleClass="align-top" />
+                            <p:outputLabel value="#{permohonanWorkflowMBean.application.tglKeputusanDitjenim == null ? null : viewBean.convertDateToString(permohonanWorkflowMBean.application.tglKeputusanDitjenim)}"
+                                           styleClass="capitalized content-bold align-top" />
+                        </h:panelGroup>
+
+                        <p:outputLabel value="Catatan Keputusan" />
+                        <h:panelGroup>
+                            <p:outputLabel value=": " styleClass="align-top" />
+                            <p:inputTextarea value="#{permohonanWorkflowMBean.application.catatanKeputusan}" autoResize="false" style="resize: none; width: 75%;"
+                                             converter="upperCaseConverter" styleClass="capitalized content-bold" readonly="true"/>
+                        </h:panelGroup>
+
+                    </p:panelGrid>
+                </p:panel>
+
+                <p:panel class="no-border no-padding" style="margin-top: 20px !important;">
+                    <ui:insert name="workflow-content" />
+                </p:panel>
+            </p:panel>
+
+        </p:panelGrid>
+
+    </ui:define>
+</ui:composition>

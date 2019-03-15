@@ -438,3 +438,13 @@ input.ui-state-disabled,
 .font-sk-skkg {
     font-family: TImes, Times New Roman, Georgia, serif;
 }
+
+.button-four {
+    height: 160% !important;
+}
+
+.panelgrid-button-four {
+    width: 50%; 
+    margin-top: 2%;
+    margin-bottom: 4%;
+}

@@ -1,0 +1,112 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h:form prependId="false">
+            <p:panel header="Data Barang" class="card-w-title ui-fluid no-border"
+                     style="text-align: -webkit-center;">
+                <p:panelGrid columns="4" columnClasses="ui-grid-col-3,ui-grid-col-2,ui-grid-col-5,ui-grid-col-2"
+                             style="width: 42%"
+                             styleClass="ui-panelgrid-blank form-group">
+                    <p:outputLabel value="Kode Barang" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:inputText value="#{barangMBean.mstBarang.kodeBarang}" style=" text-transform: uppercase;"
+                                 required="true" requiredMessage="Kode Barang tidak boleh kosong"
+                                 converter="upperCaseConverter"/>
+                    <p:commandButton value="Cari"/>
+                </p:panelGrid>
+                <p:panelGrid columns="3" columnClasses="ui-grid-col-3,ui-grid-col-2,ui-grid-col-7"
+                             style="width: 42%"
+                             styleClass="ui-panelgrid-blank form-group">
+                    <p:outputLabel value="Nama Barang" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:inputText value="#{barangMBean.mstBarang.namaBarang}" style=" text-transform: uppercase;"
+                                 required="true" requiredMessage="Nama Barang tidak boleh kosong"
+                                 converter="upperCaseConverter"/>
+                    <p:outputLabel value="Spesifikasi"/><p:outputLabel value=":"/>
+                    <p:inputText value="#{barangMBean.mstBarang.spesifikasi}" style=" text-transform: uppercase;"
+                                 required="true" requiredMessage="Spesifikasi tidak boleh kosong"
+                                 converter="upperCaseConverter"/>
+                    <p:outputLabel value="Harga Beli"/><p:outputLabel value=":"/>
+                    <p:inputText value="#{barangMBean.mstBarang.hargaBeli}" style=" text-transform: uppercase;"
+                                 required="true" requiredMessage="Harga Beli tidak boleh kosong"
+                                 converter="upperCaseConverter"/>
+                    <p:outputLabel value="Harga Jual"/><p:outputLabel value=":"/>
+                    <p:inputText value="#{barangMBean.mstBarang.hargaJual}" style=" text-transform: uppercase;"
+                                 required="true" requiredMessage="Harga Jual tidak boleh kosong"
+                                 converter="upperCaseConverter"/>
+                    <p:outputLabel value="Stok"/><p:outputLabel value=":"/>
+                    <p:inputText value="#{barangMBean.mstBarang.stok}" style=" text-transform: uppercase;"
+                                 required="true" requiredMessage="Stok tidak boleh kosong"
+                                 converter="upperCaseConverter"/>
+                    <p:outputLabel value="Keterangan"/><p:outputLabel value=":"/>
+                    <p:inputTextarea value="#{barangMBean.mstBarang.keterangan}" style=" text-transform: uppercase;"
+                                     rows="3"
+                                     converter="upperCaseConverter"/>
+                </p:panelGrid>
+                <p:panelGrid columns="4" layout="grid" class="no-border panelgrid-button-four" columnClasses="ui-g-3,ui-g-3,ui-g-3,ui-g-3">
+                    <p:commandButton value="Tambah" class="button-four"
+                                     icon="fa fa-plus"
+                                     actionListener="#{barangMBean.tambah()}"/>
+                    <p:commandButton value="Ubah" class="button-four"
+                                     icon="fa fa-edit"
+                                     actionListener="#{barangMBean.showDialogAction}"/>
+                    <p:commandButton value="Hapus" class="button-four"
+                                     icon="fa fa-trash"
+                                     actionListener="#{barangMBean.showDialogAction}"/>
+                    <p:commandButton value="Tutup" class="button-four"
+                                     icon="fa fa-close"
+                                     actionListener="#{barangMBean.showDialogAction}"/>
+                </p:panelGrid>
+                <p:dataTable id="idList" widgetVar="idWidList" var="list" reflow="true"
+                             value="#{barangMBean.listBarang}" 
+                             paginator="true" paginatorPosition="bottom"
+                             currentPageReportTemplate="{currentPage} Dari {totalPages}"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} 
+                             {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rows="10"
+                             rowIndexVar="rowIndex" lazy="true"
+                             emptyMessage="Data tidak ditemukan."
+                             tableStyle="table-layout: auto;">
+                    <p:ajax event="filter" global="false" />
+                    <f:facet name="header">
+                        Data Barang
+                    </f:facet>
+                    <p:column headerText="No" 
+                              exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+                    <p:column headerText="Kode Barang" 
+                              sortBy="#{list.kodeBarang}" filterBy="#{list.kodeBarang}">
+                        <p:outputLabel value="#{list.kodeBarang}"/>
+                    </p:column>
+                    <p:column headerText="Nama Barang"
+                              sortBy="#{list.namaBarang}" filterBy="#{list.namaBarang}">
+                        <p:outputLabel value="#{list.namaBarang}"/>
+                    </p:column>
+                    <p:column headerText="Spesifikasi"
+                              sortBy="#{list.spesifikasi}" filterBy="#{list.spesifikasi}">
+                        <p:outputLabel value="#{list.spesifikasi}"/>
+                    </p:column>
+                    <p:column headerText="Harga Beli" 
+                              sortBy="#{list.hargaBeli}" filterBy="#{list.hargaBeli}">
+                        <p:outputLabel value="#{list.hargaBeli}"/>
+                    </p:column>
+                    <p:column headerText="Harga Beli" 
+                              sortBy="#{list.hargaJual}" filterBy="#{list.hargaJual}">
+                        <p:outputLabel value="#{list.hargaJual}"/>
+                    </p:column>
+                    <p:column headerText="Harga Beli" 
+                              sortBy="#{list.stok}" filterBy="#{list.stok}">
+                        <p:outputLabel value="#{list.stok}"/>
+                    </p:column>
+                    <p:column headerText="Keterangan">
+                        <p:outputLabel value="#{list.keterangan}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

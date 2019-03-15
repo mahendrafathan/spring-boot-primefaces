@@ -1,0 +1,81 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <ui:include src="dialog/action.xhtml"/>
+        <h:form prependId="false">
+
+            <p:panel header="Negara" class="card-w-title ui-fluid no-border">
+                <p:panelGrid columns="2" layout="grid" class="no-border" columnClasses="ui-g-3,ui-g-3">
+                    <p:commandButton value="Tambah"
+                                     icon="fa fa-plus"
+                                     actionListener="#{negaraMBean.showDialogAction}"/>
+                    <p:button value="Muat Ulang"
+                              icon="fa fa-refresh" />
+                </p:panelGrid>
+                <p:dataTable id="idList" widgetVar="idWidList" var="list" reflow="true"
+                             value="#{negaraMBean.listKebangsaan}" 
+                             paginator="true" paginatorPosition="bottom"
+                             currentPageReportTemplate="{currentPage} Dari {totalPages}"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} 
+                             {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rows="10"
+                             rowIndexVar="rowIndex" lazy="true"
+                             emptyMessage="Data tidak ditemukan."
+                             tableStyle="table-layout: auto;">
+                    <p:ajax event="filter" global="false" />
+                    <f:facet name="header">
+                        Negara
+                    </f:facet>
+                    <p:column headerText="No" 
+                              exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+                    <p:column headerText="Kode Negara" 
+                              sortBy="#{list.kodenegara}" filterBy="#{list.kodenegara}">
+                        <p:outputLabel value="#{list.kodenegara}"/>
+                    </p:column>
+                    <p:column headerText="Nama Negara"
+                              sortBy="#{list.kebangsaan}" filterBy="#{list.kebangsaan}">
+                        <p:outputLabel value="#{list.kebangsaan}"/>
+                    </p:column>
+                    <p:column headerText="Diwaspadai"
+                              sortBy="#{list.rawan}">
+                        <p:outputLabel value="#{list.rawan eq '1'?'Rawan':'Aman'}"/>
+                    </p:column>
+                    <p:column headerText="Keterangan">
+                        <p:outputLabel value="#{list.keterangan}"/>
+                    </p:column>
+                    <p:column headerText="Aksi" exportable="false" style="text-align: center;min-width: 14vw">
+                        <p:commandButton value="Ubah" style="max-width: 70px;margin-bottom: 5px;margin-top: 5px"
+                                         icon="fa fa-edit"
+                                         actionListener="#{negaraMBean.showDialogAction}">
+                            <f:attribute name="refKebangsaan" value="#{list}" />
+                        </p:commandButton>
+                        <p:commandButton value="Hapus" style="max-width: 80px" 
+                                         actionListener="#{negaraMBean.deleteRecord}"
+                                         icon="fa fa-trash">
+                            <f:attribute name="refKebangsaan" value="#{list}" />
+                            <p:confirm header="Konfirmasi" 
+                                       message="Apakah anda ingin menghapus data #{list.kebangsaan} ?" 
+                                       icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                <h3>Ekspor Data</h3>
+                <h:commandLink>
+                    <p:graphicImage name="/images/excel.png" width="40"/>
+                    <p:dataExporter type="xls" target="idList" fileName="Daftar_Negara" pageOnly="true" />
+                </h:commandLink>
+                <h:commandLink>
+                    <p:graphicImage name="/images/pdf.png" width="40"/>
+                    <p:dataExporter type="pdf" target="idList" fileName="Daftar_Negara" />
+                </h:commandLink>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

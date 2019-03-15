@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>prosia</groupId>
-    <artifactId>Izin-Tinggal-Kanim</artifactId>
+    <artifactId>Inventory</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
 
-    <name>Izin-Tinggal-Kanim-V2</name>
+    <name>Inventory</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -95,13 +95,14 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-envers</artifactId>
+            <version>4.3.6.Final</version>
         </dependency>
                 
         <!-- Database -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <!--<version>8.0.12</version>-->
+            <version>8.0.12</version>
         </dependency>
         <!-- Database -->
         <dependency>

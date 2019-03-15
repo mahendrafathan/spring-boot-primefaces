@@ -1292,10 +1292,15 @@ body {
       border-width: 5px 5px 5px 0;
       border-right-color: #782978; }
 .layout-wrapper .layout-footer {
-  padding: 15px 20px;
-  -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
-  -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25); }
+    padding: 15px 20px;
+    position: fixed;
+    bottom: 0;
+    width: 85%;
+    text-align: center;
+    background-color: whitesmoke;
+    -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
+    -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25); }
   .layout-wrapper .layout-footer .footer-text-left img {
     height: 25px; }
   .layout-wrapper .layout-footer .footer-text-right {

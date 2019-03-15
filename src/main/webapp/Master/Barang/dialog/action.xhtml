@@ -20,20 +20,17 @@
                              styleClass="ui-panelgrid-blank form-group">
                     <p:outputLabel value="Kode Negara" class="req-mandatory"/><p:outputLabel value=":"/>
                     <p:inputText value="#{negaraMBean.refKebangsaan.kodenegara}" style=" text-transform: uppercase;"
-                                 required="true" requiredMessage="Kode Icao tidak boleh kosong"
-                                 converter="upperCaseConverter"/>
+                                 required="true" requiredMessage="Kode Icao tidak boleh kosong"/>
                     <p:outputLabel value="Nama Negara" class="req-mandatory"/><p:outputLabel value=":"/>
                     <p:inputText value="#{negaraMBean.refKebangsaan.kebangsaan}" style=" text-transform: uppercase;"
-                                 required="true" requiredMessage="Nama negara tidak boleh kosong"
-                                 converter="upperCaseConverter"/>
+                                 required="true" requiredMessage="Nama negara tidak boleh kosong"/>
                     <p:outputLabel value="Status Rawan"/><p:outputLabel value=":"/>
                     <p:selectOneRadio value="#{negaraMBean.refKebangsaan.rawan}">
                         <f:selectItem itemLabel="Rawan" itemValue="1" />
                         <f:selectItem itemLabel="Aman" itemValue="0" />
                     </p:selectOneRadio>
                     <p:outputLabel value="Keterangan"/><p:outputLabel value=":"/>
-                    <p:inputText value="#{negaraMBean.refKebangsaan.keterangan}" style=" text-transform: uppercase;"
-                                 converter="upperCaseConverter"/>
+                    <p:inputText value="#{negaraMBean.refKebangsaan.keterangan}" style=" text-transform: uppercase;"/>
                 </p:panelGrid>
             </p:panel>
             <p:separator/>

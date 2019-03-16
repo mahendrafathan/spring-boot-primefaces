@@ -26,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import prosia.app.model.MstBarang;
 import prosia.app.model.MstSupplier;
 import prosia.app.model.Pembelian;
+import prosia.app.model.Penjualan;
 import prosia.app.repo.BarangRepo;
 import prosia.app.repo.PembelianRepo;
 import prosia.app.repo.SupplierRepo;
@@ -46,6 +47,7 @@ public class PembelianMBean extends AbstractManagedBean implements InitializingB
     private PembelianRepo pembelianRepo;
     private Pembelian pembelian;
     private LazyDataModelFilterJPA<Pembelian> listPembelian;
+    private List<Pembelian> listPembelianLaporan;
 
     @Autowired
     private BarangRepo barangRepo;
@@ -64,6 +66,7 @@ public class PembelianMBean extends AbstractManagedBean implements InitializingB
         init();
         listBarang = barangRepo.findAll();
         listSupplier = supplierRepo.findAll();
+        listPembelianLaporan = pembelianRepo.findAll();
 
         listPembelian = new LazyDataModelFilterJPA(pembelianRepo) {
             @Override
@@ -102,12 +105,77 @@ public class PembelianMBean extends AbstractManagedBean implements InitializingB
     }
 
     public void tambah() {
+        Pembelian pembelianTmp = pembelianRepo.findTop1ByNotaBeli(pembelian.getNotaBeli());
+        if (pembelianTmp != null) {
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data sudah ada, klik ubah");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+            RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+            return;
+        }
         pembelianRepo.save(pembelian);
         init();
         showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil disimpan");
         RequestContext.getCurrentInstance().update("idList");
         RequestContext.getCurrentInstance().update("growl");
         RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+    }
+
+    public void cari() {
+        pembelian = pembelianRepo.findTop1ByNotaBeli(pembelian.getNotaBeli());
+        if (pembelian == null) {
+            pembelian = new Pembelian();
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data tidak ditemukan");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+            RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+        }
+    }
+
+    public void ubah() {
+        Pembelian pembelianTmp = pembelianRepo.findTop1ByNotaBeli(pembelian.getNotaBeli());
+        if (pembelianTmp == null) {
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Cari data terlebih dahulu");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+            RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+            return;
+        }
+        pembelianRepo.save(pembelian);
+        init();
+        showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil disimpan");
+        RequestContext.getCurrentInstance().update("idList");
+        RequestContext.getCurrentInstance().update("growl");
+        RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+    }
+
+    public void hapus() {
+        Pembelian pembelianTmp = pembelianRepo.findTop1ByNotaBeli(pembelian.getNotaBeli());
+        if (pembelianTmp == null) {
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Cari data terlebih dahulu");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+            RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+            return;
+        }
+        pembelianRepo.delete(pembelian);
+        init();
+        showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil dihapus");
+        RequestContext.getCurrentInstance().update("idList");
+        RequestContext.getCurrentInstance().update("growl");
+        RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+    }
+
+    public void cetak() {
+        Pembelian pembelianTmp = pembelianRepo.findTop1ByNotaBeli(pembelian.getNotaBeli());
+        if (pembelianTmp == null) {
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Cari data terlebih dahulu");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+            RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+            return;
+        }
+        RequestContext.getCurrentInstance().execute("PF('showDialocActPenjualan').show())");
     }
 
 }

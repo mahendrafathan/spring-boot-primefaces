@@ -17,8 +17,12 @@
                                  styleClass="ui-panelgrid-blank form-group">
 
                         <p:outputLabel value="Nota Beli" class="req-mandatory"/><p:outputLabel value=":"/>
-                        <p:inputText value="#{pembelianMBean.pembelian.notaBeli}" style=" text-transform: uppercase;"
-                                     required="true" requiredMessage="Nota Beli tidak boleh kosong"/>
+
+                        <p:panelGrid columns="2" style="width: 100%;">
+                            <p:inputText id="idNota" value="#{pembelianMBean.pembelian.notaBeli}" style=" text-transform: uppercase;"
+                                         required="true" requiredMessage="Nota Beli tidak boleh kosong"/>
+                            <p:commandButton value="Cari" actionListener="#{pembelianMBean.cari()}" process="idNota" update="@form"/>                            
+                        </p:panelGrid>
 
                         <p:outputLabel value="Kode Barang"/><p:outputLabel value=":"/>
                         <p:selectOneMenu required="True" requiredMessage="Kode Barang harap dipilih"
@@ -88,10 +92,12 @@
                                      update="@form"/>
                     <p:commandButton value="Ubah" class="button-four"
                                      icon="fa fa-edit"
-                                     actionListener="#{barangMBean.showDialogAction}"/>
+                                     actionListener="#{pembelianMBean.ubah()}"
+                                     update="@form"/>
                     <p:commandButton value="Hapus" class="button-four"
                                      icon="fa fa-trash"
-                                     actionListener="#{barangMBean.showDialogAction}"/>
+                                     actionListener="#{pembelianMBean.hapus()}"
+                                     update="@form"/>
                     <p:commandButton value="Tutup" class="button-four"
                                      icon="fa fa-close"
                                      actionListener="#{barangMBean.showDialogAction}"/>

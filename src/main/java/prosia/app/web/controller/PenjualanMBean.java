@@ -49,7 +49,7 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
     private PenjualanRepo penjualanRepo;
     private Penjualan penjualan;
     private LazyDataModelFilterJPA<Penjualan> listPenjualan;
-       
+
     @Autowired
     private BarangRepo barangRepo;
     private List<MstBarang> listBarang;
@@ -105,12 +105,77 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
     }
 
     public void tambah() {
+        Penjualan penjualanTmp = penjualanRepo.findTop1ByNoFaktur(penjualan.getNoFaktur());
+        if (penjualanTmp != null) {
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data sudah ada, klik ubah");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+            RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+            return;
+        }
         penjualanRepo.save(penjualan);
         init();
         showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil disimpan");
         RequestContext.getCurrentInstance().update("idList");
         RequestContext.getCurrentInstance().update("growl");
         RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+    }
+
+    public void cari() {
+        penjualan = penjualanRepo.findTop1ByNoFaktur(penjualan.getNoFaktur());
+        if (penjualan == null) {
+            penjualan = new Penjualan();
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data tidak ditemukan");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+            RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+        }
+    }
+
+    public void ubah() {
+        Penjualan penjualanTmp = penjualanRepo.findTop1ByNoFaktur(penjualan.getNoFaktur());
+        if (penjualanTmp == null) {
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Cari data terlebih dahulu");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+            RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+            return;
+        }
+        penjualanRepo.save(penjualan);
+        init();
+        showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil disimpan");
+        RequestContext.getCurrentInstance().update("idList");
+        RequestContext.getCurrentInstance().update("growl");
+        RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+    }
+
+    public void hapus() {
+        Penjualan penjualanTmp = penjualanRepo.findTop1ByNoFaktur(penjualan.getNoFaktur());
+        if (penjualanTmp == null) {
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Cari data terlebih dahulu");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+            RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+            return;
+        }
+        penjualanRepo.delete(penjualan);
+        init();
+        showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil dihapus");
+        RequestContext.getCurrentInstance().update("idList");
+        RequestContext.getCurrentInstance().update("growl");
+        RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+    }
+
+    public void cetak() {
+        Penjualan penjualanTmp = penjualanRepo.findTop1ByNoFaktur(penjualan.getNoFaktur());
+        if (penjualanTmp == null) {
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Cari data terlebih dahulu");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+            RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+            return;
+        }
+        RequestContext.getCurrentInstance().execute("PF('showDialocActPenjualan').show())");
     }
 
 }

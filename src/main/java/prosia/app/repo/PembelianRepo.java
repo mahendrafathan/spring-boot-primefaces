@@ -18,4 +18,5 @@ import prosia.app.model.Pembelian;
 @Repository
 public interface PembelianRepo extends JpaRepository<Pembelian, Integer>, JpaSpecificationExecutor<Pembelian> {
     
+    public Pembelian findTop1ByNotaBeli(String nota);
 }

@@ -18,4 +18,5 @@ import prosia.app.model.Penjualan;
 @Repository
 public interface PenjualanRepo extends JpaRepository<Penjualan, Integer>, JpaSpecificationExecutor<Penjualan>{
     
+    public Penjualan findTop1ByNoFaktur(String noFaktur);
 }

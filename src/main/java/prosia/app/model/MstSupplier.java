@@ -24,6 +24,7 @@ import javax.persistence.Basic;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.SequenceGenerator;
+import lombok.Data;
 
 /**
  * @author Owner
@@ -31,6 +32,7 @@ import javax.persistence.SequenceGenerator;
  */
 @Entity
 @Table(name = "mst_supplier")
+@Data
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
 public class MstSupplier {

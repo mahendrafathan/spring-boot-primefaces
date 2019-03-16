@@ -1,0 +1,156 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h:form prependId="false">
+            <p:panel header="Data Pembelian" class="card-w-title ui-fluid no-border"
+                     style="text-align: -webkit-center;">
+                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6"
+                             style="width: 80%"
+                             styleClass="ui-panelgrid-blank form-group">
+                    <p:panelGrid columns="3" columnClasses="ui-grid-col-3,ui-grid-col-2,ui-grid-col-7"
+                                 style="width: 100%"
+                                 styleClass="ui-panelgrid-blank form-group">
+
+                        <p:outputLabel value="Nota Beli" class="req-mandatory"/><p:outputLabel value=":"/>
+                        <p:inputText value="#{pembelianMBean.pembelian.notaBeli}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Nota Beli tidak boleh kosong"/>
+
+                        <p:outputLabel value="Kode Barang"/><p:outputLabel value=":"/>
+                        <p:selectOneMenu required="True" requiredMessage="Kode Barang harap dipilih"
+                                         value="#{pembelianMBean.pembelian.kodeBarang}"
+                                         filter="true" filterMatchMode="contains"
+                                         converter="PickListConverter"
+                                         style="width: 390px; max-width: 100%">
+                            <f:selectItem itemValue="#{null}" itemLabel="Pilih Barang"/>
+                            <f:selectItems value="#{pembelianMBean.listBarang}"
+                                           var="barang"
+                                           itemLabel="#{barang.kodeBarang}"
+                                           itemValue="#{barang}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Nama Barang"/><p:outputLabel value=":"/>
+                        <p:inputText value="#{pembelianMBean.pembelian.namaBarang}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Nama Barang tidak boleh kosong"/>
+
+                        <p:outputLabel value="Kode Supplier"/><p:outputLabel value=":"/>
+                        <p:selectOneMenu required="True" requiredMessage="Kode Supplier harap dipilih"
+                                         value="#{pembelianMBean.pembelian.kodeSupplier}"
+                                         filter="true" filterMatchMode="contains"
+                                         converter="PickListConverter"
+                                         style="width: 390px; max-width: 100%">
+                            <f:selectItem itemValue="#{null}" itemLabel="Pilih Supplier"/>
+                            <f:selectItems value="#{pembelianMBean.listSupplier}"
+                                           var="supplier"
+                                           itemLabel="#{supplier.kodeSupplier}"
+                                           itemValue="#{supplier}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Nama Supplier"/><p:outputLabel value=":"/>
+                        <p:inputText value="#{pembelianMBean.pembelian.namaSupplier}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Nama Supplier tidak boleh kosong"/>
+                    </p:panelGrid>
+
+                    <p:panelGrid columns="3" columnClasses="ui-grid-col-3,ui-grid-col-2,ui-grid-col-7"
+                                 style="width: 100%"
+                                 styleClass="ui-panelgrid-blank form-group">
+
+                        <p:outputLabel value="Tanggal Beli"/><p:outputLabel value=":"/>
+                        <p:calendar value="#{pembelianMBean.pembelian.tglBeli}"/>
+
+                        <p:outputLabel value="Harga Satuan" class="req-mandatory"/><p:outputLabel value=":"/>
+                        <p:inputText value="#{pembelianMBean.pembelian.hargaSatuan}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Harga Satuan tidak boleh kosong"/>
+
+                        <p:outputLabel value="Jumlah Beli"/><p:outputLabel value=":"/>
+                        <p:inputText value="#{pembelianMBean.pembelian.jumlahBeli}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Jumlah Beli tidak boleh kosong"/>
+
+                        <p:outputLabel value="Total Harga"/><p:outputLabel value=":"/>
+                        <p:inputText value="#{pembelianMBean.pembelian.totalHarga}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Total Harga Jual tidak boleh kosong"/>
+
+                        <p:outputLabel value="Diskon"/><p:outputLabel value=":"/>
+                        <p:inputText value="#{pembelianMBean.pembelian.diskon}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Diskon tidak boleh kosong"/>
+
+                    </p:panelGrid>
+                </p:panelGrid>
+
+                <p:panelGrid columns="4" layout="grid" class="no-border panelgrid-button-four" columnClasses="ui-g-3,ui-g-3,ui-g-3,ui-g-3">
+                    <p:commandButton value="Tambah" class="button-four"
+                                     icon="fa fa-plus"
+                                     actionListener="#{pembelianMBean.tambah()}"
+                                     update="@form"/>
+                    <p:commandButton value="Ubah" class="button-four"
+                                     icon="fa fa-edit"
+                                     actionListener="#{barangMBean.showDialogAction}"/>
+                    <p:commandButton value="Hapus" class="button-four"
+                                     icon="fa fa-trash"
+                                     actionListener="#{barangMBean.showDialogAction}"/>
+                    <p:commandButton value="Tutup" class="button-four"
+                                     icon="fa fa-close"
+                                     actionListener="#{barangMBean.showDialogAction}"/>
+                </p:panelGrid>
+                <p:dataTable id="idList" widgetVar="idWidList" var="list" reflow="true"
+                             value="#{pembelianMBean.listPembelian}" 
+                             paginator="true" paginatorPosition="bottom"
+                             currentPageReportTemplate="{currentPage} Dari {totalPages}"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} 
+                             {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rows="10"
+                             rowIndexVar="rowIndex" lazy="true"
+                             emptyMessage="Data tidak ditemukan."
+                             tableStyle="table-layout: auto;">
+                    <p:ajax event="filter" global="false" />
+                    <f:facet name="header">
+                        Data Pembelian
+                    </f:facet>
+                    <p:column headerText="No" 
+                              exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+                    <p:column headerText="Nota Beli" 
+                              sortBy="#{list.notaBeli}" filterBy="#{list.notaBeli}">
+                        <p:outputLabel value="#{list.notaBeli}"/>
+                    </p:column>
+                    <p:column headerText="Nama Barang"
+                              sortBy="#{list.namaBarang}" filterBy="#{list.namaBarang}">
+                        <p:outputLabel value="#{list.namaBarang}"/>
+                    </p:column>
+                    <p:column headerText="Nama Supplier"
+                              sortBy="#{list.namaSupplier}" filterBy="#{list.namaSupplier}">
+                        <p:outputLabel value="#{list.namaSupplier}"/>
+                    </p:column>
+                    <p:column headerText="Tanggal Beli" 
+                              sortBy="#{list.tglBeli}" filterBy="#{list.tglBeli}">
+                        <p:outputLabel value="#{list.tglBeli}"/>
+                    </p:column>
+                    <p:column headerText="Harga Satuan" 
+                              sortBy="#{list.hargaSatuan}" filterBy="#{list.hargaSatuan}">
+                        <p:outputLabel value="#{list.hargaSatuan}"/>
+                    </p:column>
+                    <p:column headerText="Jumlah Beli" 
+                              sortBy="#{list.jumlahBeli}" filterBy="#{list.jumlahBeli}">
+                        <p:outputLabel value="#{list.jumlahBeli}"/>
+                    </p:column>
+                    <p:column headerText="Diskon">
+                        <p:outputLabel value="#{list.diskon}"/>
+                    </p:column>
+                    <p:column headerText="Total Harga">
+                        <p:outputLabel value="#{list.totalHarga}"/>
+                    </p:column>
+                </p:dataTable>
+                <h3>Export Page Data Only</h3>
+                <h:commandLink immediate="true">
+                    <p:graphicImage name="/images/logo-pt-air.jpeg" />
+                    <p:dataExporter type="pdf" target="idList" fileName="cars"/>
+                </h:commandLink>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

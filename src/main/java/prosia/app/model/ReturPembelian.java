@@ -21,9 +21,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.Basic;
 import javax.persistence.SequenceGenerator;
+import lombok.Data;
 
 @Entity
 @Table(name = "retur_pembelian")
+@Data
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
 public class ReturPembelian {
@@ -50,12 +52,13 @@ public class ReturPembelian {
     private String notaBeli;
     
     @Column(name="tgl_retur")
+    @Temporal(javax.persistence.TemporalType.TIME)
     private Date tglRetur;
     
     @Column(name="nama_barang", length=15)
     private String namaBarang;
     
-    @JoinColumn(name = "kd_supplier",referencedColumnName = "kd_supplier")
+    @JoinColumn(name = "SUPPLIER_ID",referencedColumnName = "SUPPLIER_ID")
     @ManyToOne
     private MstSupplier kodeSupplier;
     

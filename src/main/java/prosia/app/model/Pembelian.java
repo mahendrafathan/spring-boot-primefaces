@@ -24,6 +24,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.Basic;
 import javax.persistence.SequenceGenerator;
+import lombok.Data;
 
 /**
  * @author Owner
@@ -31,6 +32,7 @@ import javax.persistence.SequenceGenerator;
  */
 @Entity
 @Table(name = "pembelian")
+@Data
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
 public class Pembelian {
@@ -46,9 +48,6 @@ public class Pembelian {
     
     @Id
     @Basic(optional = false)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PEMBELIAN_SEQ")
-//    @SequenceGenerator(sequenceName = "PEMBELIAN_SEQ", allocationSize = 1, name = "PEMBELIAN_SEQ")
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PEMBELIAN_ID", nullable = false)
     private Integer pembelianId;
@@ -59,14 +58,14 @@ public class Pembelian {
     @Column(name = "tgl_beli")
     private Date tglBeli;
 
-    @JoinColumn(name = "kd_barang", referencedColumnName = "kd_barang")
+    @JoinColumn(name = "BARANG_ID", referencedColumnName = "BARANG_ID")
     @ManyToOne
     private MstBarang kodeBarang;
 
     @Column(name = "nama_barang", length = 15)
     private String namaBarang;
 
-    @JoinColumn(name = "kd_supplier", referencedColumnName = "kd_supplier")
+    @JoinColumn(name = "SUPPLIER_ID", referencedColumnName = "SUPPLIER_ID")
     @ManyToOne
     private MstSupplier kodeSupplier;
 

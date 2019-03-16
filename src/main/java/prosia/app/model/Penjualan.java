@@ -24,6 +24,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.Basic;
 import javax.persistence.SequenceGenerator;
+import lombok.Data;
 
 /**
  * @author Owner
@@ -31,6 +32,7 @@ import javax.persistence.SequenceGenerator;
  */
 @Entity
 @Table(name = "penjualan")
+@Data
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
 public class Penjualan {
@@ -62,14 +64,14 @@ public class Penjualan {
     @Column(name = "tgl_jual")
     private Date tglJual;
 
-    @JoinColumn(name = "kd_barang", referencedColumnName = "kd_barang")
+    @JoinColumn(name = "barang_id", referencedColumnName = "barang_id")
     @ManyToOne
     private MstBarang kodeBarang;
 
     @Column(name = "nama_barang", length = 15)
     private String namaBarang;
 
-    @JoinColumn(name = "kd_pelanggan", referencedColumnName = "kd_pelanggan")
+    @JoinColumn(name = "pelanggan_id", referencedColumnName = "pelanggan_id")
     @ManyToOne
     private MstPelanggan kodePelanggan;
 

@@ -25,8 +25,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.SequenceGenerator;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author Owner

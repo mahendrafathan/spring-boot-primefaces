@@ -1,0 +1,51 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <h:form prependId="false">
+            <p:panel header="Data Barang" style="width: 100%" id="idPanel"
+                     class=" card card-w-title ui-fluid">
+                <f:facet name="header">
+                    <
+                </f:facet>
+                <style type="text/css">
+                    .tg  {border-collapse:collapse;border-spacing:0;}
+                    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                    .tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+                    .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+                </style>
+                <table class="tg">
+                    <tr>
+                        <th class="tg-0pky">Kode Barang</th>
+                        <th class="tg-0pky">Nama Barang</th>
+                        <th class="tg-0pky">Harga Satuan</th>
+                        <th class="tg-0pky">Jumlah Beli</th>
+                        <th class="tg-0pky">Total Harga</th>
+                        <th class="tg-0pky">Diskon</th>
+                    </tr>
+                    <c:forEach items="#{pembelianMBean.listPembelianLaporan}" var="pembelian">
+                        <tr>
+                            <td class="tg-0pky">#{pembelian.kodeBarang.kodeBarang}</td>
+                            <td class="tg-0pky">#{pembelian.namaBarang}</td>
+                            <td class="tg-0pky">#{pembelian.hargaSatuan}</td>
+                            <td class="tg-0pky">#{pembelian.jumlahBeli}</td>
+                            <td class="tg-0pky">#{pembelian.totalHarga}</td>
+                            <td class="tg-0pky">#{pembelian.diskon}</td>
+                        </tr>
+                    </c:forEach>
+                </table>
+            </p:panel>
+
+            <p:commandButton value="Cetak" style="max-width: 150px; margin-right: 10px" update="@form">
+                <p:printer target="idPanel"/>
+            </p:commandButton>
+        </h:form>
+    </ui:define>
+</ui:composition>

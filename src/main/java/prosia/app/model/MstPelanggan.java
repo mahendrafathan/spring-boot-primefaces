@@ -52,7 +52,7 @@ public class MstPelanggan {
     @Column(name = "PELANGGAN_ID", nullable = false)
     private Integer pelangganId;
 
-    @Column(name = "kd_pelanggan", length = 15)
+    @Column(name = "kd_pelanggan", length = 15, unique = true)
     private String kodePelanggan;
 
     @Column(name = "nama_pelanggan", length = 30)

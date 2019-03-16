@@ -48,6 +48,7 @@ public class BarangMBean extends AbstractManagedBean implements InitializingBean
     @Autowired
     private BarangRepo barangRepo;
     private LazyDataModelFilterJPA<MstBarang> listBarang;
+    private List<MstBarang> listBarang2;
     private MstBarang mstBarang;
     private String kodeBarang;
 
@@ -58,6 +59,8 @@ public class BarangMBean extends AbstractManagedBean implements InitializingBean
     @Override
     public void afterPropertiesSet() throws Exception {
         init();
+        listBarang2 = new ArrayList<>();
+        listBarang2 = barangRepo.findAllByStatusOrderByNamaBarangAsc(MstBarang.Status.ACTIVE);
         listBarang = new LazyDataModelFilterJPA(barangRepo) {
             @Override
             protected Page getDatas(PageRequest request, Map filters) {
@@ -279,5 +282,11 @@ public class BarangMBean extends AbstractManagedBean implements InitializingBean
         } catch (IOException ex) {
             Logger.getLogger(BarangMBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void showDialogCetak() {
+        RequestContext.getCurrentInstance().reset("idDialogCetak");
+        RequestContext.getCurrentInstance().update("idDialogCetak");
+        RequestContext.getCurrentInstance().execute("PF('showDialogCetak').show()");
     }
 }

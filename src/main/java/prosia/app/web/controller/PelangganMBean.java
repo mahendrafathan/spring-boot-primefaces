@@ -48,6 +48,7 @@ public class PelangganMBean extends AbstractManagedBean implements InitializingB
     @Autowired
     private PelangganRepo pelangganRepo;
     private LazyDataModelFilterJPA<MstPelanggan> listPelanggan;
+    private List<MstPelanggan> listPelanggan2;
     private MstPelanggan mstPelanggan;
     private String kodePelanggan;
 
@@ -58,6 +59,8 @@ public class PelangganMBean extends AbstractManagedBean implements InitializingB
     @Override
     public void afterPropertiesSet() throws Exception {
         init();
+        listPelanggan2 = new ArrayList<>();
+        listPelanggan2 = pelangganRepo.findAllByStatusOrderByNamaPelangganAsc(MstPelanggan.Status.ACTIVE);
         listPelanggan = new LazyDataModelFilterJPA(pelangganRepo) {
             @Override
             protected Page getDatas(PageRequest request, Map filters) {
@@ -268,5 +271,11 @@ public class PelangganMBean extends AbstractManagedBean implements InitializingB
         } catch (IOException ex) {
             Logger.getLogger(PelangganMBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void showDialogCetak() {
+        RequestContext.getCurrentInstance().reset("idDialogCetak");
+        RequestContext.getCurrentInstance().update("idDialogCetak");
+        RequestContext.getCurrentInstance().execute("PF('showDialogCetak').show()");
     }
 }

@@ -47,6 +47,7 @@ public class SupplierMBean extends AbstractManagedBean implements InitializingBe
     @Autowired
     private SupplierRepo supplierRepo;
     private LazyDataModelFilterJPA<MstSupplier> listSupplier;
+    private List<MstSupplier> listSupplier2;
     private MstSupplier mstSupplier;
     private String kodeSupplier;
 
@@ -57,6 +58,8 @@ public class SupplierMBean extends AbstractManagedBean implements InitializingBe
     @Override
     public void afterPropertiesSet() throws Exception {
         init();
+        listSupplier2 = new ArrayList<>();
+        listSupplier2 = supplierRepo.findAllByStatusOrderByNamaSupplierAsc(MstSupplier.Status.ACTIVE);
         listSupplier = new LazyDataModelFilterJPA(supplierRepo) {
             @Override
             protected Page getDatas(PageRequest request, Map filters) {
@@ -269,5 +272,11 @@ public class SupplierMBean extends AbstractManagedBean implements InitializingBe
         } catch (IOException ex) {
             Logger.getLogger(SupplierMBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void showDialogCetak() {
+        RequestContext.getCurrentInstance().reset("idDialogCetak");
+        RequestContext.getCurrentInstance().update("idDialogCetak");
+        RequestContext.getCurrentInstance().execute("PF('showDialogCetak').show()");
     }
 }

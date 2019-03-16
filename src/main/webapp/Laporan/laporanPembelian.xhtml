@@ -1,0 +1,126 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+        <h:form prependId="false">
+            <p:growl id="idGrowl" showDetail="false"/>
+            <p:panel header="Laporan Pembelian"
+                     style="width: 100%; height: 100%">
+                <p:panel class="no-border" style="width: 50%">
+                    <p:panelGrid columns="2" columnClasses="ui-g-4, ui-g-8" style="width: 100%">
+                        <p:outputLabel value="Periode Laporan" class="required-note"/>
+                        <p:selectOneRadio value="#{laporanMBean.periode}"
+                                          required="true" requiredMessage="Periode Laporan harap dipilih">
+                            <p:ajax update="@form" listener="#{laporanMBean.onChangePeriode()}"/>
+                            <f:selectItem itemLabel="Bulan" itemValue="bulan" />
+                            <f:selectItem itemLabel="Hari" itemValue="hari"/>
+                        </p:selectOneRadio>
+                        <p:outputLabel value="Tahun" rendered="#{laporanMBean.periode eq 'bulan' ? true : false}"/>
+                        <p:selectOneMenu required="true" requiredMessage="Tahun harap dipilih"
+                                         value="#{laporanMBean.tahun}"
+                                         converter="PickListConverter"
+                                         style="width: 390px; max-width: 100%"
+                                         rendered="#{laporanMBean.periode eq 'bulan' ? true : false}">
+                            <p:ajax listener="#{laporanMBean.onChangeTahun()}" update="idBulan"/>
+                            <f:selectItem itemValue="#{null}" itemLabel="PILIH TAHUN"/>
+                            <f:selectItems value="#{laporanMBean.listTahun}"
+                                           var="year"
+                                           itemLabel="#{year.tahun}"
+                                           itemValue="#{year.tahun}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Bulan" rendered="#{laporanMBean.periode eq 'bulan' ? true : false}"/>
+                        <p:selectOneMenu id="idBulan" required="true" requiredMessage="Bulan harap dipilih"
+                                         value="#{laporanMBean.bulan}"
+                                         converter="PickListConverter"
+                                         style="width: 390px; max-width: 100%"
+                                         rendered="#{laporanMBean.periode eq 'bulan' ? true : false}">
+                            <f:selectItem itemValue="#{null}" itemLabel="PILIH BULAN"/>
+                            <f:selectItems value="#{laporanMBean.listBulan}"
+                                           var="month"
+                                           itemLabel="#{month.bulan eq '0' ? 'JANUARI' : 
+                                                        month.bulan eq '1' ? 'FEBRUARI' : 
+                                                        month.bulan eq '2' ? 'MARET' :
+                                                        month.bulan eq '3' ? 'APRIL' : 
+                                                        month.bulan eq '4' ? 'MEI' : 
+                                                        month.bulan eq '5' ? 'JUNI' : 
+                                                        month.bulan eq '6' ? 'JULI' : 
+                                                        month.bulan eq '7' ? 'AGUSTUS':
+                                                        month.bulan eq '8' ? 'SEPTEMBER' :
+                                                        month.bulan eq '9' ? 'OKTOBER' : 
+                                                        month.bulan eq '10' ? 'NOVEMBER' : 
+                                                        month.bulan eq '11' ? 'DESEMBER' : null}"
+                                           itemValue="#{month.bulan}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Hari" class="required-note"
+                                       rendered="#{laporanMBean.periode eq 'hari' ? true : false}"/>
+                        <p:calendar value="#{laporanMBean.tanggal}" maxdate="#{now}" yearRange="c-80:c"
+                                    navigator="true" pattern="dd-MM-yyyy" showOn="button" required="true" mask="true"
+                                    requiredMessage="Hari harap dipilih" style="width: auto"
+                                    rendered="#{laporanMBean.periode eq 'hari' ? true : false}"/>
+                    </p:panelGrid>
+                    <p:separator/>
+                    <p:commandButton value="Tampilkan" actionListener="#{laporanMBean.tampilkan()}"
+                                     style="width: 20%; margin-top: 3%; margin-bottom: 1%" update="@form">
+                        <f:attribute name="laporan" value="pembelian"/>
+                    </p:commandButton>
+                </p:panel>
+            </p:panel>
+        </h:form>
+        
+        <p:dialog showEffect="fade" hideEffect="fade"
+                  showHeader="false" closable="false"
+                  position="center" id="idDialogCetak"
+                  header="Informasi" appendTo="@(body)"  
+                  widgetVar="showDialogCetak" 
+                  modal="true" height="auto"
+                  width="auto"
+                  responsive="true" resizable="false">
+            <h:form prependId="false" style="text-align: center">
+                <p:panel style="width: 100%; text-align: center" id="idPanel" header="Data Pembelian"
+                         class="card card-w-title ui-fluid">
+                    <br/>
+                    <style type="text/css">
+                        .tg  {border-collapse:collapse;border-spacing:0;}
+                        .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                        .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                        .tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+                        .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+                    </style>
+                        <table class="tg" style="width: 100%; text-align: center">
+                        <tr>
+                            <th class="tg-0pky">Nota Beli</th>
+                            <th class="tg-0pky">Nama Barang</th>
+                            <th class="tg-0pky">Nama Supplier</th>
+                            <th class="tg-0pky">Tanggal Beli</th>
+                            <th class="tg-0pky">Harga Satuan</th>
+                            <th class="tg-0pky">Jumlah Beli</th>
+                            <th class="tg-0pky">Diskon</th>
+                            <th class="tg-0pky">Total Harga</th>
+                        </tr>
+                        <c:forEach items="#{laporanMBean.listPembelian}" var="listPembelian">
+                            <tr>
+                                <td class="tg-0pky">#{listPembelian.notaBeli}</td>
+                                <td class="tg-0pky">#{listPembelian.namaBarang}</td>
+                                <td class="tg-0pky">#{listPembelian.namaSupplier}</td>
+                                <td class="tg-0pky">#{listPembelian.tglBeli}</td>
+                                <td class="tg-0pky">#{listPembelian.hargaSatuan}</td>
+                                <td class="tg-0pky">#{listPembelian.jumlahBeli}</td>
+                                <td class="tg-0pky">#{listPembelian.diskon} %</td>
+                                <td class="tg-0pky">#{listPembelian.totalHarga}</td>
+                            </tr>
+                        </c:forEach>
+                    </table>
+                </p:panel>
+                <p:commandButton value="Cetak" style="max-width: 150px; margin-right: 10px" update="@form">
+                    <p:printer target="idPanel"/>
+                </p:commandButton>
+                <p:commandButton value="Tutup" style="max-width: 150px; margin-right: 10px" process="@this" update="@form"
+                                 onclick="PF('showDialogCetak').hide()"/>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>

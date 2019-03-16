@@ -30,7 +30,7 @@
                 <p:separator/>
                 <p:panelGrid style="width: 100%;"
                              styleClass="ui-panelgrid-blank from-group">
-                    <p:commandButton value="Simpan" style="float: right" actionListener="#{registrationController.registration(null)}"/>
+                    <p:commandButton value="Simpan" style="float: right" actionListener="#{registrationController.registration()}" update="@form"/>
                 </p:panelGrid>
             </p:panel>
         </h:form>

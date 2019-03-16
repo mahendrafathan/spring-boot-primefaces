@@ -31,6 +31,7 @@
                                          filter="true" filterMatchMode="contains"
                                          converter="PickListConverter"
                                          style="width: 390px; max-width: 100%">
+                            <p:ajax listener="#{pembelianMBean.onChangeBarang()}" update="idNamaBarang,idHargaSatuan"/>
                             <f:selectItem itemValue="#{null}" itemLabel="Pilih Barang"/>
                             <f:selectItems value="#{pembelianMBean.listBarang}"
                                            var="barang"
@@ -39,8 +40,8 @@
                         </p:selectOneMenu>
 
                         <p:outputLabel value="Nama Barang"/><p:outputLabel value=":"/>
-                        <p:inputText value="#{pembelianMBean.pembelian.namaBarang}" style=" text-transform: uppercase;"
-                                     required="true" requiredMessage="Nama Barang tidak boleh kosong"/>
+                        <p:inputText id="idNamaBarang" value="#{pembelianMBean.pembelian.namaBarang}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Nama Barang tidak boleh kosong" disabled="true"/>
 
                         <p:outputLabel value="Kode Supplier"/><p:outputLabel value=":"/>
                         <p:selectOneMenu required="True" requiredMessage="Kode Supplier harap dipilih"
@@ -48,6 +49,7 @@
                                          filter="true" filterMatchMode="contains"
                                          converter="PickListConverter"
                                          style="width: 390px; max-width: 100%">
+                            <p:ajax listener="#{pembelianMBean.onChangeSupplier()}" update="idSupplier"/>
                             <f:selectItem itemValue="#{null}" itemLabel="Pilih Supplier"/>
                             <f:selectItems value="#{pembelianMBean.listSupplier}"
                                            var="supplier"
@@ -56,8 +58,8 @@
                         </p:selectOneMenu>
 
                         <p:outputLabel value="Nama Supplier"/><p:outputLabel value=":"/>
-                        <p:inputText value="#{pembelianMBean.pembelian.namaSupplier}" style=" text-transform: uppercase;"
-                                     required="true" requiredMessage="Nama Supplier tidak boleh kosong"/>
+                        <p:inputText id="idSupplier" value="#{pembelianMBean.pembelian.namaSupplier}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Nama Supplier tidak boleh kosong" disabled="true"/>
                     </p:panelGrid>
 
                     <p:panelGrid columns="3" columnClasses="ui-grid-col-3,ui-grid-col-2,ui-grid-col-7"
@@ -68,20 +70,24 @@
                         <p:calendar value="#{pembelianMBean.pembelian.tglBeli}"/>
 
                         <p:outputLabel value="Harga Satuan" class="req-mandatory"/><p:outputLabel value=":"/>
-                        <p:inputText value="#{pembelianMBean.pembelian.hargaSatuan}" style=" text-transform: uppercase;"
-                                     required="true" requiredMessage="Harga Satuan tidak boleh kosong"/>
+                        <p:inputText id="idHargaSatuan" value="#{pembelianMBean.pembelian.hargaSatuan}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Harga Satuan tidak boleh kosong" onkeypress="return isNumberKey(event)" disabled="true"/>
 
                         <p:outputLabel value="Jumlah Beli"/><p:outputLabel value=":"/>
                         <p:inputText value="#{pembelianMBean.pembelian.jumlahBeli}" style=" text-transform: uppercase;"
-                                     required="true" requiredMessage="Jumlah Beli tidak boleh kosong"/>
+                                     required="true" requiredMessage="Jumlah Beli tidak boleh kosong" onkeypress="return isNumberKey(event)">
+                            <p:ajax event="blur" listener="#{pembelianMBean.totalHarga()}" update="total"/>
+                        </p:inputText>
 
                         <p:outputLabel value="Total Harga"/><p:outputLabel value=":"/>
-                        <p:inputText value="#{pembelianMBean.pembelian.totalHarga}" style=" text-transform: uppercase;"
-                                     required="true" requiredMessage="Total Harga Jual tidak boleh kosong"/>
+                        <p:inputText id="total" value="#{pembelianMBean.pembelian.totalHarga}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Total Harga Jual tidak boleh kosong" onkeypress="return isNumberKey(event)"/>
 
                         <p:outputLabel value="Diskon"/><p:outputLabel value=":"/>
                         <p:inputText value="#{pembelianMBean.pembelian.diskon}" style=" text-transform: uppercase;"
-                                     required="true" requiredMessage="Diskon tidak boleh kosong"/>
+                                     required="true" requiredMessage="Diskon tidak boleh kosong" onkeypress="return isNumberKey(event)" maxlength="99">
+                            <p:ajax event="blur" listener="#{pembelianMBean.totalHarga()}" update="total"/>
+                        </p:inputText>
 
                     </p:panelGrid>
                 </p:panelGrid>

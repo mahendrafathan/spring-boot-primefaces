@@ -177,4 +177,29 @@ public class PembelianMBean extends AbstractManagedBean implements InitializingB
         RequestContext.getCurrentInstance().execute("PF('showDialocActPenjualan').show())");
     }
 
+    public void onChangeBarang() {
+        if (pembelian != null && pembelian.getKodeBarang() != null) {
+            pembelian.setNamaBarang(pembelian.getKodeBarang().getNamaBarang());
+            pembelian.setHargaSatuan(pembelian.getKodeBarang().getHargaJual());
+        } else {
+            pembelian.setNamaBarang(null);
+            pembelian.setHargaSatuan(null);
+        }
+
+    }
+
+    public void onChangeSupplier() {
+        if (pembelian != null && pembelian.getKodeSupplier()!= null) {
+            pembelian.setNamaSupplier(pembelian.getKodeSupplier().getNamaSupplier());
+        } else {
+            pembelian.setNamaSupplier(null);
+        }
+    }
+    
+    public void totalHarga() {
+        if (pembelian.getHargaSatuan() != null && pembelian.getDiskon() != null && pembelian.getJumlahBeli() != null) {
+            pembelian.setTotalHarga((pembelian.getHargaSatuan() * (100 - pembelian.getDiskon()) / 100) * pembelian.getJumlahBeli());
+        }
+    }
+
 }

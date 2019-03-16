@@ -5,23 +5,18 @@
  */
 package prosia.app.web.controller;
 
-import java.beans.PropertyEditor;
-import java.util.List;
-import java.util.Map;
+import javax.faces.application.FacesMessage;
 import lombok.Data;
-import org.springframework.beans.PropertyEditorRegistry;
+import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import prosia.app.config.UserValidator;
 import prosia.app.model.User;
-import prosia.app.repo.UserRepository;
 import prosia.app.service.UserService;
+import prosia.app.web.util.AbstractManagedBean;
+import static prosia.app.web.util.AbstractManagedBean.showGrowl;
 
 /**
  *
@@ -30,7 +25,7 @@ import prosia.app.service.UserService;
 @Controller
 @Scope("view")
 @Data
-public class RegistrationController implements InitializingBean {
+public class RegistrationController extends AbstractManagedBean implements InitializingBean {
 
     @Autowired
     private UserService userService;
@@ -44,13 +39,16 @@ public class RegistrationController implements InitializingBean {
         newUser = new User();
     }
 
-    public void registration(BindingResult bindingResult) {
+    public void registration() {
 
         if (userService.findByUsername(newUser.getUsername()) != null) {
-            System.out.println("sudah ada");
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "User sudah terdaftar");
+            RequestContext.getCurrentInstance().update("growl");
         } else {
-            System.out.println("belum ada");
             userService.save(newUser);
+            newUser = new User();
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "User berhasil didaftarkan");
+            RequestContext.getCurrentInstance().update("growl");
         }
     }
 }

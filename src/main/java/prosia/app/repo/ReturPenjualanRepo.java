@@ -18,4 +18,5 @@ import prosia.app.model.ReturPenjualan;
 @Repository
 public interface ReturPenjualanRepo extends JpaRepository<ReturPenjualan, Integer>, JpaSpecificationExecutor<ReturPenjualan> {
     
+    public ReturPenjualan findTop1ByNotaJual(String nota);
 }

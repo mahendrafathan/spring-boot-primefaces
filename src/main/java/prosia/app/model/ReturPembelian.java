@@ -52,7 +52,7 @@ public class ReturPembelian {
     private String notaBeli;
     
     @Column(name="tgl_retur")
-    @Temporal(javax.persistence.TemporalType.TIME)
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date tglRetur;
     
     @Column(name="nama_barang", length=15)

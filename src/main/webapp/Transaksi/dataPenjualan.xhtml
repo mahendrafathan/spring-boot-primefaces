@@ -1,0 +1,174 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <ui:include src="printPenjualan.xhtml"/>
+        <h:form prependId="false">
+            <p:panel header="Data Penjualan" class="card-w-title ui-fluid no-border"
+                     style="text-align: -webkit-center;">
+                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6"
+                             style="width: 80%"
+                             styleClass="ui-panelgrid-blank form-group">
+                    <p:panelGrid columns="3" columnClasses="ui-grid-col-3,ui-grid-col-2,ui-grid-col-7"
+                                 style="width: 100%"
+                                 styleClass="ui-panelgrid-blank form-group">
+                        <p:outputLabel value="No. Faktur" class="req-mandatory"/><p:outputLabel value=":"/>
+                        <p:panelGrid columns="2" style="width: 100%;">
+                            <p:inputText id="idNoFaktur" value="#{penjualanMBean.penjualan.noFaktur}" style=" text-transform: uppercase; float: left"
+                                         required="true" requiredMessage="No. Faktur tidak boleh kosong"/>
+                            <p:commandButton value="Cari" actionListener="#{penjualanMBean.cari()}" process="idNoFaktur" update="@form"/>
+                        </p:panelGrid>
+
+                        <p:outputLabel value="Nota Jual"/><p:outputLabel value=":"/>
+                        <p:inputText value="#{penjualanMBean.penjualan.notaJual}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Nota Jual tidak boleh kosong"/>
+
+                        <p:outputLabel value="Tanggal Jual"/><p:outputLabel value=":"/>
+                        <p:calendar value="#{penjualanMBean.penjualan.tglJual}"/>
+
+                        <p:outputLabel value="Kode Barang"/><p:outputLabel value=":"/>
+                        <p:selectOneMenu required="True" requiredMessage="Kode Barang harap dipilih"
+                                         value="#{penjualanMBean.penjualan.kodeBarang}"
+                                         filter="true" filterMatchMode="contains"
+                                         converter="PickListConverter"
+                                         style="width: 390px; max-width: 100%">
+                            <f:selectItem itemValue="#{null}" itemLabel="Pilih Barang"/>
+                            <f:selectItems value="#{penjualanMBean.listBarang}"
+                                           var="barang"
+                                           itemLabel="#{barang.kodeBarang}"
+                                           itemValue="#{barang}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Nama Barang"/><p:outputLabel value=":"/>
+                        <p:inputText value="#{penjualanMBean.penjualan.namaBarang}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Nama Barang tidak boleh kosong"/>
+
+                        <p:outputLabel value="Kode Pelanggan"/><p:outputLabel value=":"/>     
+                        <p:selectOneMenu required="True" requiredMessage="Kode Barang harap dipilih"
+                                         value="#{penjualanMBean.penjualan.kodePelanggan}"
+                                         filter="true" filterMatchMode="contains"
+                                         converter="PickListConverter"
+                                         style="width: 390px; max-width: 100%">
+                            <f:selectItem itemValue="#{null}" itemLabel="Pilih Pelanggan"/>
+                            <f:selectItems value="#{penjualanMBean.listPelanggan}"
+                                           var="pelanggan"
+                                           itemLabel="#{pelanggan.kodePelanggan}"
+                                           itemValue="#{pelanggan}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+
+                    <p:panelGrid columns="3" columnClasses="ui-grid-col-3,ui-grid-col-2,ui-grid-col-7"
+                                 style="width: 100%"
+                                 styleClass="ui-panelgrid-blank form-group">
+
+                        <p:outputLabel value="Nama Pelanggan" class="req-mandatory"/><p:outputLabel value=":"/>
+                        <p:inputText value="#{penjualanMBean.penjualan.namaPelanggan}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Nama Pelanggan tidak boleh kosong"/>
+
+                        <p:outputLabel value="Jumlah Jual"/><p:outputLabel value=":"/>
+                        <p:inputText value="#{penjualanMBean.penjualan.jumlahJual}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Jumlah Jual tidak boleh kosong"/>
+
+                        <p:outputLabel value="Harga Satuan"/><p:outputLabel value=":"/>
+                        <p:inputText value="#{penjualanMBean.penjualan.hargaSatuan}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Harga Satuan tidak boleh kosong"/>
+
+                        <p:outputLabel value="Stok"/><p:outputLabel value=":"/>
+                        <p:inputText value="#{penjualanMBean.penjualan.stok}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Stok tidak boleh kosong"/>
+
+                        <p:outputLabel value="Total Harga"/><p:outputLabel value=":"/>
+                        <p:inputText value="#{penjualanMBean.penjualan.totalHarga}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Total Harga tidak boleh kosong"/>
+                        <p:outputLabel value="Diskon"/><p:outputLabel value=":"/>
+
+                        <p:inputText value="#{penjualanMBean.penjualan.diskon}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Diskon tidak boleh kosong"/>
+
+                    </p:panelGrid>
+                </p:panelGrid>
+
+                <p:panelGrid columns="5" layout="grid" class="no-border panelgrid-button-four" columnClasses="ui-g-3,ui-g-3,ui-g-2,ui-g-2, ui-g-2">
+                    <p:commandButton value="Tambah" class="button-four"
+                                     icon="fa fa-plus"
+                                     actionListener="#{penjualanMBean.tambah()}"
+                                     update="@form"/>
+                    <p:commandButton value="Ubah" class="button-four"
+                                     icon="fa fa-edit"
+                                     actionListener="#{penjualanMBean.ubah()}"
+                                     update="@form"/>
+                    <p:commandButton value="Print" class="button-four"
+                                     icon="fa fa-print"
+                                     onclick="PF('showDialocActPenjualan').show()"
+                                     process="@form"/>
+                    <p:commandButton value="Hapus" class="button-four"
+                                     icon="fa fa-trash"
+                                     actionListener="#{penjualanMBean.hapus()}"
+                                     update="@form"/>
+                    <p:commandButton value="Tutup" class="button-four"
+                                     icon="fa fa-close"
+                                     actionListener="#{barangMBean.showDialogAction}"/>
+                </p:panelGrid>
+                <p:dataTable id="idList" widgetVar="idWidList" var="list" reflow="true"
+                             value="#{penjualanMBean.listPenjualan}" 
+                             paginator="true" paginatorPosition="bottom"
+                             currentPageReportTemplate="{currentPage} Dari {totalPages}"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} 
+                             {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rows="10"
+                             rowIndexVar="rowIndex" lazy="true"
+                             emptyMessage="Data tidak ditemukan."
+                             tableStyle="table-layout: auto;">
+                    <p:ajax event="filter" global="false" />
+                    <f:facet name="header">
+                        Data Barang
+                    </f:facet>
+                    <p:column headerText="No" 
+                              exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+                    <p:column headerText="No. Faktur" 
+                              sortBy="#{list.noFaktur}" filterBy="#{list.noFaktur}">
+                        <p:outputLabel value="#{list.noFaktur}"/>
+                    </p:column>
+                    <p:column headerText="Nota Jual"
+                              sortBy="#{list.notaJual}" filterBy="#{list.notaJual}">
+                        <p:outputLabel value="#{list.notaJual}"/>
+                    </p:column>
+                    <p:column headerText="Tanggal Jual"
+                              sortBy="#{list.tglJual}" filterBy="#{list.tglJual}">
+                        <p:outputLabel value="#{list.tglJual}"/>
+                    </p:column>
+                    <p:column headerText="Nama Barang" 
+                              sortBy="#{list.namaBarang}" filterBy="#{list.namaBarang}">
+                        <p:outputLabel value="#{list.namaBarang}"/>
+                    </p:column>
+                    <p:column headerText="Nama Pelanggan" 
+                              sortBy="#{list.namaPelanggan}" filterBy="#{list.namaPelanggan}">
+                        <p:outputLabel value="#{list.namaPelanggan}"/>
+                    </p:column>
+                    <p:column headerText="Jumlah Jual" 
+                              sortBy="#{list.jumlahJual}" filterBy="#{list.jumlahJual}">
+                        <p:outputLabel value="#{list.jumlahJual}"/>
+                    </p:column>
+                    <p:column headerText="Harga Satuan" 
+                              sortBy="#{list.hargaSatuan}" filterBy="#{list.hargaSatuan}">
+                        <p:outputLabel value="#{list.hargaSatuan}"/>
+                    </p:column>
+                    <p:column headerText="Total Harga" 
+                              sortBy="#{list.totalHarga}" filterBy="#{list.totalHarga}">
+                        <p:outputLabel value="#{list.totalHarga}"/>
+                    </p:column>
+                    <p:column headerText="Diskon" 
+                              sortBy="#{list.diskon}" filterBy="#{list.diskon}">
+                        <p:outputLabel value="#{list.diskon}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

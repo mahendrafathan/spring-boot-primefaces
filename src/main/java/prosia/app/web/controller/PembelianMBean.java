@@ -26,7 +26,6 @@ import org.springframework.stereotype.Controller;
 import prosia.app.model.MstBarang;
 import prosia.app.model.MstSupplier;
 import prosia.app.model.Pembelian;
-import prosia.app.model.Penjualan;
 import prosia.app.repo.BarangRepo;
 import prosia.app.repo.PembelianRepo;
 import prosia.app.repo.SupplierRepo;

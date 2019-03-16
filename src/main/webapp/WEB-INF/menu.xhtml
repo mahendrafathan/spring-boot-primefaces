@@ -14,10 +14,25 @@
                     <p:panel class="no-border no-padding" style="width: 1351px;">
                         <div style="text-align: left">
                             <pu:menu>
-                                <p:menuitem id="master" value="Master" icon="fa fa-database"/>
-                                <p:menuitem id="transaksi" value="Transaksi" icon="fa fa-shopping-cart"/>
-                                <p:menuitem id="laporan" value="Laporan" icon="fa fa-table"/>
-                                <p:menuitem id="retur" value="Retur" icon="fa fa-undo"/>
+                                <p:submenu label="Master" icon="fa fa-database">
+                                    <p:menuitem value="Data Barang" icon="fa fa-database" />
+                                    <p:menuitem value="Data Supplier" icon="fa fa-database" />
+                                    <p:menuitem value="Data Pelanggan" icon="fa fa-database" />
+                                    <p:menuitem value="Keluar" icon="fa fa-database" />
+                                </p:submenu>
+                                <p:submenu label="Transaksi" icon="fa fa-shopping-cart">
+                                    <p:menuitem value="Pembelian" icon="fa fa-shopping-cart" outcome="/Transaksi/dataPembelian"/>
+                                    <p:menuitem value="Penjualan" icon="fa fa-shopping-cart" outcome="/Transaksi/dataPenjualan"/>
+                                </p:submenu>
+                                <p:submenu label="Laporan" icon="fa fa-table">
+                                    <p:menuitem value="Laporan Pembelian" icon="fa fa-table" />
+                                    <p:menuitem value="Laporan Penjualan" icon="fa fa-table" />
+                                    <p:menuitem value="Laporan Inventory" icon="fa fa-table" />
+                                </p:submenu>
+                                <p:submenu label="Retur" icon="fa fa-undo">
+                                    <p:menuitem value="Retur Pembelian" icon="fa fa-undo" outcome="/Retur/dataReturPembelian"/>
+                                    <p:menuitem value="Retur Penjualan" icon="fa fa-undo" outcome="/Retur/dataReturPenjualan"/>
+                                </p:submenu>
                             </pu:menu>
                         </div>
                     </p:panel>

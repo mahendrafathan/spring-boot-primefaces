@@ -25,7 +25,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import prosia.app.model.MstBarang;
 import prosia.app.model.MstPelanggan;
+import prosia.app.model.Pembelian;
 import prosia.app.model.Penjualan;
+import prosia.app.model.ReturPembelian;
 import prosia.app.model.ReturPenjualan;
 import prosia.app.repo.BarangRepo;
 import prosia.app.repo.PelangganRepo;
@@ -103,6 +105,14 @@ public class ReturPenjualanMBean extends AbstractManagedBean implements Initiali
     }
 
     public void tambah() {
+       ReturPenjualan returPenjualanTmp = returPenjualanRepo.findTop1ByNotaJual(returPenjualan.getNotaJual());
+        if (returPenjualanTmp != null) {
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data sudah ada, klik ubah");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+            RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+            return;
+        }
         returPenjualanRepo.save(returPenjualan);
         init();
         showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil disimpan");
@@ -110,5 +120,62 @@ public class ReturPenjualanMBean extends AbstractManagedBean implements Initiali
         RequestContext.getCurrentInstance().update("growl");
         RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
     }
+    
+    public void cari() {
+        returPenjualan = returPenjualanRepo.findTop1ByNotaJual(returPenjualan.getNotaJual());
+        if (returPenjualan == null) {
+            returPenjualan = new ReturPenjualan();
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data tidak ditemukan");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+            RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+        }
+    }
+    public void ubah() {
+        ReturPenjualan returPenjualanTmp = returPenjualanRepo.findTop1ByNotaJual(returPenjualan.getNotaJual());
+        if (returPenjualanTmp == null) {
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Cari data terlebih dahulu");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+            RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+            return;
+        }
+        returPenjualanRepo.save(returPenjualan);
+        init();
+        showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil disimpan");
+        RequestContext.getCurrentInstance().update("idList");
+        RequestContext.getCurrentInstance().update("growl");
+        RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+    }
+
+    public void hapus() {
+        ReturPenjualan returPenjualanTmp = returPenjualanRepo.findTop1ByNotaJual(returPenjualan.getNotaJual());
+        if (returPenjualanTmp == null) {
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Cari data terlebih dahulu");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+            RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+            return;
+        }
+        returPenjualanRepo.delete(returPenjualan);
+        init();
+        showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil dihapus");
+        RequestContext.getCurrentInstance().update("idList");
+        RequestContext.getCurrentInstance().update("growl");
+        RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+    }
+
+    public void cetak() {
+        ReturPenjualan returPenjualanTmp = returPenjualanRepo.findTop1ByNotaJual(returPenjualan.getNotaJual());
+        if (returPenjualanTmp == null) {
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Cari data terlebih dahulu");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+            RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+            return;
+        }
+        RequestContext.getCurrentInstance().execute("PF('showDialocActPenjualan').show())");
+    }
+
 
 }

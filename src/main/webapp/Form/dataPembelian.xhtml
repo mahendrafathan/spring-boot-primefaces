@@ -6,6 +6,7 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
+        <ui:include src="printPembelian.xhtml"/>
         <h:form prependId="false">
             <p:panel header="Data Pembelian" class="card-w-title ui-fluid no-border"
                      style="text-align: -webkit-center;">
@@ -85,7 +86,7 @@
                     </p:panelGrid>
                 </p:panelGrid>
 
-                <p:panelGrid columns="4" layout="grid" class="no-border panelgrid-button-four" columnClasses="ui-g-3,ui-g-3,ui-g-3,ui-g-3">
+                <p:panelGrid columns="5" layout="grid" class="no-border panelgrid-button-four" columnClasses="ui-g-3,ui-g-3,ui-g-2,ui-g-2, ui-g-2">
                     <p:commandButton value="Tambah" class="button-four"
                                      icon="fa fa-plus"
                                      actionListener="#{pembelianMBean.tambah()}"
@@ -94,6 +95,10 @@
                                      icon="fa fa-edit"
                                      actionListener="#{pembelianMBean.ubah()}"
                                      update="@form"/>
+                    <p:commandButton value="Print" class="button-four"
+                                     icon="fa fa-print"
+                                     onclick="PF('showDialocActPembelian').show()"
+                                     process="@form"/>
                     <p:commandButton value="Hapus" class="button-four"
                                      icon="fa fa-trash"
                                      actionListener="#{pembelianMBean.hapus()}"

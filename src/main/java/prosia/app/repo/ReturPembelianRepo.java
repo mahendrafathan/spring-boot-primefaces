@@ -18,4 +18,5 @@ import prosia.app.model.ReturPembelian;
 @Repository
 public interface ReturPembelianRepo extends JpaRepository<ReturPembelian, Integer>, JpaSpecificationExecutor<ReturPembelian>{
     
+    public ReturPembelian findTop1ByNotaBeli(String nota);
 }

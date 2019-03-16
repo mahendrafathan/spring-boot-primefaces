@@ -1,0 +1,64 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog showEffect="fade" hideEffect="fade"
+              position="center" id="showDialocActPembelian"
+              header="Data Pembelian" appendTo="@(body)"  
+              widgetVar="showDialocActPembelian" 
+              modal="true" height="95%" width="40%"
+              responsive="true" resizable="false">
+
+        <h:form prependId="false">
+            <p:panel style="width: 100%" id="idPanel"
+                     class=" card card-w-title ui-fluid">
+                <p:panelGrid columns="2" class="no-border">
+                    <p:outputLabel value="Nota Beli"/>
+                    <p:outputLabel value=": #{pembelianMBean.pembelian.notaBeli}"/>
+                    <p:outputLabel value="Tanggal Beli"/>
+                    <p:outputLabel value=": #{pembelianMBean.pembelian.tglBeli}"/>
+                    <p:outputLabel value="Kode Supplier"/>
+                    <p:outputLabel value=": #{pembelianMBean.pembelian.kodeSupplier.kodeSupplier}"/>
+                    <p:outputLabel value="Nama Supplier"/>
+                    <p:outputLabel value=": #{pembelianMBean.pembelian.namaSupplier}"/>
+                </p:panelGrid>
+                <br/>
+                <br/>
+                <br/>
+                <style type="text/css">
+                    .tg  {border-collapse:collapse;border-spacing:0;}
+                    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                    .tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+                    .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+                </style>
+                <table class="tg">
+                    <tr>
+                        <th class="tg-0pky">Kode Barang</th>
+                        <th class="tg-0pky">Nama Barang</th>
+                        <th class="tg-0pky">Harga Satuan</th>
+                        <th class="tg-0pky">Jumlah Beli</th>
+                        <th class="tg-0pky">Total Harga</th>
+                        <th class="tg-0pky">Diskon</th>
+                    </tr>
+                    <tr>
+                        <td class="tg-0pky">#{pembelianMBean.pembelian.kodeBarang.kodeBarang}</td>
+                        <td class="tg-0pky">#{pembelianMBean.pembelian.namaBarang}</td>
+                        <td class="tg-0pky">#{pembelianMBean.pembelian.hargaSatuan}</td>
+                        <td class="tg-0pky">#{pembelianMBean.pembelian.jumlahBeli}</td>
+                        <td class="tg-0pky">#{pembelianMBean.pembelian.totalHarga}</td>
+                        <td class="tg-0pky">#{pembelianMBean.pembelian.diskon}</td>
+                    </tr>
+                </table>
+            </p:panel>
+
+            <p:commandButton value="Cetak" style="max-width: 150px; margin-right: 10px" update="@form">
+                <p:printer target="idPanel"/>
+            </p:commandButton>
+        </h:form>
+
+    </p:dialog>
+</ui:composition>

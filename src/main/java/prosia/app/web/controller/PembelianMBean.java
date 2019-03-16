@@ -174,7 +174,9 @@ public class PembelianMBean extends AbstractManagedBean implements InitializingB
             RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
             return;
         }
-        RequestContext.getCurrentInstance().execute("PF('showDialocActPenjualan').show())");
+        RequestContext.getCurrentInstance().reset("idDialogCetak");
+        RequestContext.getCurrentInstance().update("idDialogCetak");
+        RequestContext.getCurrentInstance().execute("PF('showDialogCetak').show()");
     }
 
     public void onChangeBarang() {

@@ -6,10 +6,12 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <p:dialog showEffect="fade" hideEffect="fade"
-              position="center" id="showDialocActPembelian"
-              header="Data Pembelian" appendTo="@(body)"  
-              widgetVar="showDialocActPembelian" 
-              modal="true" height="95%" width="40%"
+              showHeader="false" closable="false"
+              position="center" id="idDialogCetak"
+              header="Informasi" appendTo="@(body)"  
+              widgetVar="showDialogCetak" 
+              modal="true" height="auto"
+              width="auto"
               responsive="true" resizable="false">
 
         <h:form prependId="false">
@@ -58,6 +60,8 @@
             <p:commandButton value="Cetak" style="max-width: 150px; margin-right: 10px" update="@form">
                 <p:printer target="idPanel"/>
             </p:commandButton>
+            <p:commandButton value="Tutup" style="max-width: 150px; margin-right: 10px" process="@this" update="@form"
+                             onclick="PF('showDialogCetak').hide()"/>
         </h:form>
 
     </p:dialog>

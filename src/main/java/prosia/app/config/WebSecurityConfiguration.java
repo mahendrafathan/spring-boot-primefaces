@@ -38,9 +38,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/").authenticated()
-                .antMatchers("/welcome/**").authenticated()
-                .antMatchers("/dashboard/**").authenticated()
-                .antMatchers("/icons/**").authenticated()
+                .antMatchers("/Master/**").authenticated()
+                .antMatchers("/Transaksi/**").authenticated()
+                .antMatchers("/Laporan/**").authenticated()
+                .antMatchers("/Retur/**").authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login.xhtml")

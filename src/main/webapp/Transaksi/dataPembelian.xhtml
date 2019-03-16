@@ -8,6 +8,7 @@
     <ui:define name="content">
         <ui:include src="printPembelian.xhtml"/>
         <h:form prependId="false">
+            <p:growl id="idGrowl" showDetail="false"/>
             <p:panel header="Data Pembelian" class="card-w-title ui-fluid no-border"
                      style="text-align: -webkit-center;">
                 <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6"
@@ -67,7 +68,7 @@
                                  styleClass="ui-panelgrid-blank form-group">
 
                         <p:outputLabel value="Tanggal Beli"/><p:outputLabel value=":"/>
-                        <p:calendar value="#{pembelianMBean.pembelian.tglBeli}"/>
+                        <p:calendar value="#{pembelianMBean.pembelian.tglBeli}" pattern="dd-MM-yyyy"/>
 
                         <p:outputLabel value="Harga Satuan" class="req-mandatory"/><p:outputLabel value=":"/>
                         <p:inputText id="idHargaSatuan" value="#{pembelianMBean.pembelian.hargaSatuan}" style=" text-transform: uppercase;"
@@ -103,7 +104,7 @@
                                      update="@form"/>
                     <p:commandButton value="Print" class="button-four"
                                      icon="fa fa-print"
-                                     onclick="PF('showDialocActPembelian').show()"
+                                     actionListener="#{pembelianMBean.cetak()}"
                                      process="@form"/>
                     <p:commandButton value="Hapus" class="button-four"
                                      icon="fa fa-trash"
@@ -145,7 +146,9 @@
                     </p:column>
                     <p:column headerText="Tanggal Beli" 
                               sortBy="#{list.tglBeli}" filterBy="#{list.tglBeli}">
-                        <p:outputLabel value="#{list.tglBeli}"/>
+                        <p:outputLabel value="#{list.tglBeli}">
+                            <f:convertDateTime pattern="dd-MM-yyyy" />
+                        </p:outputLabel>
                     </p:column>
                     <p:column headerText="Harga Satuan" 
                               sortBy="#{list.hargaSatuan}" filterBy="#{list.hargaSatuan}">

@@ -175,7 +175,35 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
             RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
             return;
         }
-        RequestContext.getCurrentInstance().execute("PF('showDialocActPenjualan').show())");
+        RequestContext.getCurrentInstance().reset("idDialogCetak");
+        RequestContext.getCurrentInstance().update("idDialogCetak");
+        RequestContext.getCurrentInstance().execute("PF('showDialogCetak').show()");
     }
 
+    public void onChangeBarang() {
+        if (penjualan != null && penjualan.getKodeBarang() != null) {
+            penjualan.setNamaBarang(penjualan.getKodeBarang().getNamaBarang());
+            penjualan.setHargaSatuan(penjualan.getKodeBarang().getHargaJual());
+            penjualan.setStok(penjualan.getKodeBarang().getStok());
+        } else {
+            penjualan.setNamaBarang(null);
+            penjualan.setHargaSatuan(null);
+            penjualan.setStok(null);
+        }
+    }
+
+    public void onChangePelanggan() {
+        if (penjualan != null && penjualan.getKodePelanggan() != null) {
+            penjualan.setNamaPelanggan(penjualan.getKodePelanggan().getNamaPelanggan());
+        } else {
+            penjualan.setNamaPelanggan(null);
+        }
+    }
+
+    public void totalHarga() {
+        if (penjualan.getHargaSatuan() != null && penjualan.getDiskon() != null && penjualan.getJumlahJual()!= null) {
+            penjualan.setTotalHarga((penjualan.getHargaSatuan() * (100 - penjualan.getDiskon()) / 100) * penjualan.getJumlahJual());
+            penjualan.setStok(penjualan.getStok() - penjualan.getJumlahJual());
+        }
+    }
 }

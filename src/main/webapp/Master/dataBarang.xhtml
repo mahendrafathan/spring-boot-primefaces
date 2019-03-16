@@ -7,20 +7,22 @@
 
     <ui:define name="content">
         <h:form prependId="false">
-            <p:panel header="Data Barang" class="card-w-title ui-fluid no-border"
+            <p:growl id="idGrowl" showDetail="false"/>
+            <p:panel id="pDataBarang" header="Data Barang" class="card-w-title ui-fluid no-border"
                      style="text-align: -webkit-center;">
-                <p:panelGrid columns="4" columnClasses="ui-grid-col-3,ui-grid-col-2,ui-grid-col-5,ui-grid-col-2"
-                             style="width: 42%"
+                <p:panelGrid id="pgKodeBarang" columns="4" columnClasses="ui-grid-col-3,ui-grid-col-2,ui-grid-col-5,ui-grid-col-2"
+                             style="width: 48%"
                              styleClass="ui-panelgrid-blank form-group">
-                    <p:outputLabel value="Kode Barang" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:outputLabel value="Kode Barang"/><p:outputLabel value=":"/>
                     <p:inputText value="#{barangMBean.mstBarang.kodeBarang}" style=" text-transform: uppercase;"
                                  required="true" requiredMessage="Kode Barang tidak boleh kosong"/>
-                    <p:commandButton value="Cari"/>
+                    <p:commandButton value="Cari" process="pgKodeBarang" update="idGrowl, pDataBarang" 
+                                     actionListener="#{barangMBean.cari()}"/>
                 </p:panelGrid>
                 <p:panelGrid columns="3" columnClasses="ui-grid-col-3,ui-grid-col-2,ui-grid-col-7"
-                             style="width: 42%"
+                             style="width: 48%"
                              styleClass="ui-panelgrid-blank form-group">
-                    <p:outputLabel value="Nama Barang" class="req-mandatory"/><p:outputLabel value=":"/>
+                    <p:outputLabel value="Nama Barang"/><p:outputLabel value=":"/>
                     <p:inputText value="#{barangMBean.mstBarang.namaBarang}" style=" text-transform: uppercase;"
                                  required="true" requiredMessage="Nama Barang tidak boleh kosong"/>
                     <p:outputLabel value="Spesifikasi"/><p:outputLabel value=":"/>
@@ -28,30 +30,36 @@
                                  required="true" requiredMessage="Spesifikasi tidak boleh kosong"/>
                     <p:outputLabel value="Harga Beli"/><p:outputLabel value=":"/>
                     <p:inputText value="#{barangMBean.mstBarang.hargaBeli}" style=" text-transform: uppercase;"
-                                 required="true" requiredMessage="Harga Beli tidak boleh kosong"/>
+                                 required="true" requiredMessage="Harga Beli tidak boleh kosong"
+                                 onkeypress="return isNumberKey(event)"/>
                     <p:outputLabel value="Harga Jual"/><p:outputLabel value=":"/>
                     <p:inputText value="#{barangMBean.mstBarang.hargaJual}" style=" text-transform: uppercase;"
-                                 required="true" requiredMessage="Harga Jual tidak boleh kosong"/>
+                                 required="true" requiredMessage="Harga Jual tidak boleh kosong"
+                                 onkeypress="return isNumberKey(event)"/>
                     <p:outputLabel value="Stok"/><p:outputLabel value=":"/>
                     <p:inputText value="#{barangMBean.mstBarang.stok}" style=" text-transform: uppercase;"
-                                 required="true" requiredMessage="Stok tidak boleh kosong"/>
+                                 required="true" requiredMessage="Stok tidak boleh kosong"
+                                 onkeypress="return isNumberKey(event)"/>
                     <p:outputLabel value="Keterangan"/><p:outputLabel value=":"/>
                     <p:inputTextarea value="#{barangMBean.mstBarang.keterangan}" style=" text-transform: uppercase;"
                                      rows="3"/>
                 </p:panelGrid>
                 <p:panelGrid columns="4" layout="grid" class="no-border panelgrid-button-four" columnClasses="ui-g-3,ui-g-3,ui-g-3,ui-g-3">
                     <p:commandButton value="Tambah" class="button-four"
-                                     icon="fa fa-plus"
-                                     actionListener="#{barangMBean.tambah()}"/>
+                                     icon="fa fa-plus" 
+                                     actionListener="#{barangMBean.tambah()}" update="@form"/>
                     <p:commandButton value="Ubah" class="button-four"
                                      icon="fa fa-edit"
-                                     actionListener="#{barangMBean.showDialogAction}"/>
+                                     actionListener="#{barangMBean.ubah()}" update="@form"/>
                     <p:commandButton value="Hapus" class="button-four"
                                      icon="fa fa-trash"
-                                     actionListener="#{barangMBean.showDialogAction}"/>
+                                     actionListener="#{barangMBean.hapus()}" update="@form">
+                        <p:confirm header="Hapus data" message="Apakah anda yakin akan menghapus data?" icon="ui-icon-alert" />
+                    </p:commandButton>
                     <p:commandButton value="Tutup" class="button-four"
                                      icon="fa fa-close"
-                                     actionListener="#{barangMBean.showDialogAction}"/>
+                                     actionListener="#{barangMBean.tutup()}" 
+                                     process="@this"/>
                 </p:panelGrid>
                 <p:dataTable id="idList" widgetVar="idWidList" var="list" reflow="true"
                              value="#{barangMBean.listBarang}" 
@@ -99,6 +107,15 @@
                         <p:outputLabel value="#{list.keterangan}"/>
                     </p:column>
                 </p:dataTable>
+                <h:commandLink class="command-link" immediate="true">
+                    <h:outputText value="Cetak" class="text"/>
+                    <p:dataExporter type="pdf" target="idList" fileName="Daftar_Barang" />
+                </h:commandLink>
+                <!--                <p:commandButton id="Cetak" 
+                                                 value="Cetak" 
+                                                 style="max-width: 150px; margin-right: 10px">
+                                    <p:printer target="idTabelBarang"/>
+                                </p:commandButton>-->
             </p:panel>
         </h:form>
     </ui:define>

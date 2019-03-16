@@ -438,3 +438,46 @@ input.ui-state-disabled,
 .font-sk-skkg {
     font-family: TImes, Times New Roman, Georgia, serif;
 }
+
+.button-four {
+    height: 120% !important;
+}
+
+.panelgrid-button-four {
+    width: 50%; 
+    margin-top: 1%;
+    margin-bottom: 2%;
+}
+
+.command-link {
+    width: 12%;
+    height: 34px !important;
+    display: inline-block;
+    text-align: center;
+    padding: 7px 6px 6px 6px !important;
+    font-size: 16px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    overflow: hidden;
+    margin: 20px 9px 3px 9px !important;
+    background-color: #337ab7;
+    font-size: 14px;
+}
+
+.command-link:hover {
+    background-color: #195f9b;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.command-link .text {
+    color: white;
+}

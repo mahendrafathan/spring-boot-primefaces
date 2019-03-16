@@ -46,11 +46,11 @@ public class MstBarang {
     @Column(name = "BARANG_ID", nullable = false)
     private Integer barangId;
     
-    @Column(name = "kd_barang", length = 5, unique = true)
+    @Column(name = "kd_barang", length = 15, unique = true)
 //    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private String kodeBarang;
 
-    @Column(name = "nama_barang", length = 15)
+    @Column(name = "nama_barang", length = 25)
     private String namaBarang;
 
     @Column(name = "spesifikasi", length = 30)
@@ -72,7 +72,7 @@ public class MstBarang {
     @CreatedDate
     private Date createdAt;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private Date updatedAt;

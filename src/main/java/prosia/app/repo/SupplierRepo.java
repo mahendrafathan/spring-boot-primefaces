@@ -24,4 +24,6 @@ public interface SupplierRepo extends JpaRepository<MstSupplier, BigDecimal>, Jp
     public MstSupplier findTop1ByNamaSupplierAndStatus(String namaSupplier, MstSupplier.Status s);
     
     public MstSupplier findTop1ByKodeSupplierAndStatus(String kodeSupplier, MstSupplier.Status s);
+
+    public MstSupplier findTop1ByKodeSupplier(String kodeSupplier);
 }

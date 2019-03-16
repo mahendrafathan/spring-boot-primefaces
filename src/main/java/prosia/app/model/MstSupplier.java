@@ -24,6 +24,9 @@ import javax.persistence.Basic;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.SequenceGenerator;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Owner
@@ -31,7 +34,7 @@ import javax.persistence.SequenceGenerator;
  */
 @Entity
 @Table(name = "mst_supplier")
-@EntityListeners(AuditingEntityListener.class)
+@Data
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
 public class MstSupplier {
 
@@ -48,19 +51,19 @@ public class MstSupplier {
     @Column(name = "SUPPLIER_ID", nullable = false)
     private Integer supplierId;
 
-    @Column(name = "kd_supplier", length = 5)
+    @Column(name = "kd_supplier", length = 15)
     private String kodeSupplier;
 
-    @Column(name = "nama_supplier", length = 20)
+    @Column(name = "nama_supplier", length = 30)
     private String namaSupplier;
 
-    @Column(name = "email", length = 20)
+    @Column(name = "email", length = 30)
     private String email;
 
     @Column(name = "telepon", length = 15)
     private Integer telepon;
 
-    @Column(name = "kota", length = 20)
+    @Column(name = "kota", length = 30)
     private String kota;
 
     @Column(name = "alamat", length = 50)
@@ -70,7 +73,7 @@ public class MstSupplier {
     @CreatedDate
     private Date createdAt;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private Date updatedAt;

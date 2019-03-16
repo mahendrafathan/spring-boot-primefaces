@@ -24,4 +24,6 @@ public interface BarangRepo extends JpaRepository<MstBarang, BigDecimal>, JpaSpe
     public MstBarang findTop1ByNamaBarangAndStatus(String namaBarang, MstBarang.Status s);
     
     public MstBarang findTop1ByKodeBarangAndStatus(String kodeBarang, MstBarang.Status s);
+    
+    public MstBarang findTop1ByKodeBarang(String kodeBarang);
 }

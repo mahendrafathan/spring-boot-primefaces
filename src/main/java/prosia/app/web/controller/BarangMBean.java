@@ -5,12 +5,16 @@
  */
 package prosia.app.web.controller;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -31,6 +35,7 @@ import prosia.app.web.util.AbstractManagedBean;
 import static prosia.app.web.util.AbstractManagedBean.getRequestParam;
 import static prosia.app.web.util.AbstractManagedBean.showGrowl;
 import prosia.app.web.util.LazyDataModelFilterJPA;
+
 /**
  *
  * @author PROSIA
@@ -44,7 +49,7 @@ public class BarangMBean extends AbstractManagedBean implements InitializingBean
     private BarangRepo barangRepo;
     private LazyDataModelFilterJPA<MstBarang> listBarang;
     private MstBarang mstBarang;
-    private String dalogHeader;
+    private String kodeBarang;
 
     public void init() {
         mstBarang = new MstBarang();
@@ -125,59 +130,154 @@ public class BarangMBean extends AbstractManagedBean implements InitializingBean
                 .toString();
     }
 
-    public void showDialogAction() {
-        MstBarang pBarang = (MstBarang) getRequestParam("mstBarang");
-        mstBarang = new MstBarang();
-        if (pBarang == null) {
-            dalogHeader = "Tambah Barang";
-        } else {
-            dalogHeader = "Ubah Barang";
-            mstBarang = pBarang;
-        }
-        RequestContext.getCurrentInstance().reset("idDialocAct");
-        RequestContext.getCurrentInstance().update("idDialocAct");
-        RequestContext.getCurrentInstance().execute("PF('showDialocAct').show()");
-    }
-
     public void cari() {
         log.debug("mstBarang : {}", mstBarang);
-        mstBarang = barangRepo.findTop1ByKodeBarangAndStatus(mstBarang.getKodeBarang(), MstBarang.Status.ACTIVE);
+        kodeBarang = mstBarang.getKodeBarang();
+        mstBarang = barangRepo.findTop1ByKodeBarangAndStatus(kodeBarang, MstBarang.Status.ACTIVE);
+        log.debug("mstBarang setelah cari : {}", mstBarang);
+        if (mstBarang == null) {
+            showGrowl(FacesMessage.SEVERITY_WARN, "Informasi", "Data tidak ditemukan");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+            init();
+            return;
+        }
     }
 
     public void tambah() throws InterruptedException {
-        log.debug("tambah");
-        MstBarang pMstBarang = new MstBarang();
-        pMstBarang = barangRepo.findTop1ByKodeBarangAndStatus(mstBarang.getKodeBarang(), MstBarang.Status.ACTIVE);
-        if (pMstBarang != null) {
-            showGrowl(FacesMessage.SEVERITY_WARN, "Informasi", "Barang dengan kode " + pMstBarang.getKodeBarang() + " sudah tersedia");
-            RequestContext.getCurrentInstance().update("growl");
-            return;
-        }
+        try {
+            log.debug("tambah");
+            MstBarang pMstBarang = new MstBarang();
+            pMstBarang = barangRepo.findTop1ByKodeBarang(mstBarang.getKodeBarang());
+            if (pMstBarang != null) {
+                if (pMstBarang.getStatus().equals(MstBarang.Status.ACTIVE)) {
+                    showGrowl(FacesMessage.SEVERITY_WARN, "Informasi", "Barang dengan kode " + pMstBarang.getKodeBarang() + " sudah tersedia");
+                    RequestContext.getCurrentInstance().update("growl");
+                    return;
+                } else {
+                    pMstBarang.setKodeBarang(mstBarang.getKodeBarang());
+                    pMstBarang.setNamaBarang(mstBarang.getNamaBarang());
+                    pMstBarang.setHargaBeli(mstBarang.getHargaBeli());
+                    pMstBarang.setHargaJual(mstBarang.getHargaJual());
+                    pMstBarang.setSpesifikasi(mstBarang.getSpesifikasi());
+                    pMstBarang.setKeterangan(mstBarang.getKeterangan());
+                    pMstBarang.setStok(mstBarang.getStok());
+                    pMstBarang.setCreatedAt(new Date());
+                    pMstBarang.setCreatedAt(new Date());
+                    pMstBarang.setStatus(MstBarang.Status.ACTIVE);
+                    log.debug("mstBarang : {}", mstBarang);
+                    barangRepo.save(pMstBarang);
+                    showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil disimpan");
+                    RequestContext.getCurrentInstance().update("idList");
+                    RequestContext.getCurrentInstance().update("growl");
+                    init();
+                    return;
+                }
+            }
 //        mstBarang.setBarangId(1);
-        mstBarang.setCreatedAt(new Date());
-        mstBarang.setUpdatedAt(new Date());
-        mstBarang.setStatus(MstBarang.Status.ACTIVE);
-        log.debug("mstBarang : {}", mstBarang);
-        barangRepo.save(mstBarang);
-        init();
-        showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil disimpan");
-        RequestContext.getCurrentInstance().update("idList");
-        RequestContext.getCurrentInstance().update("growl");
-        RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
+            if (kodeBarang != null) {
+                if (!kodeBarang.equals(mstBarang.getKodeBarang())) {
+                    pMstBarang = new MstBarang();
+                    pMstBarang.setKodeBarang(mstBarang.getKodeBarang());
+                    pMstBarang.setNamaBarang(mstBarang.getNamaBarang());
+                    pMstBarang.setHargaBeli(mstBarang.getHargaBeli());
+                    pMstBarang.setHargaJual(mstBarang.getHargaJual());
+                    pMstBarang.setSpesifikasi(mstBarang.getSpesifikasi());
+                    pMstBarang.setKeterangan(mstBarang.getKeterangan());
+                    pMstBarang.setStok(mstBarang.getStok());
+                    pMstBarang.setCreatedAt(new Date());
+                    pMstBarang.setCreatedAt(new Date());
+                    pMstBarang.setStatus(MstBarang.Status.ACTIVE);
+                    log.debug("mstBarang : {}", mstBarang);
+                    barangRepo.save(pMstBarang);
+                    showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil disimpan");
+                    RequestContext.getCurrentInstance().update("idList");
+                    RequestContext.getCurrentInstance().update("growl");
+                    init();
+                    return;
+                }
+            }
+            mstBarang.setCreatedAt(new Date());
+            mstBarang.setStatus(MstBarang.Status.ACTIVE);
+            log.debug("mstBarang : {}", mstBarang);
+            barangRepo.save(mstBarang);
+            init();
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil disimpan");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+        } catch (Exception ex) {
+            Logger.getLogger(BarangMBean.class.getName()).log(Level.SEVERE, null, ex);
+            showGrowl(FacesMessage.SEVERITY_ERROR, "Peringatan", "Terjadi kesalahan ubah data");
+            RequestContext.getCurrentInstance().update("growl");
+        }
     }
 
     public void ubah() throws InterruptedException {
-        log.debug("mstBarang : {}", mstBarang);
-        mstBarang = new MstBarang();
+        try {
+            if (kodeBarang == null) {
+                showGrowl(FacesMessage.SEVERITY_WARN, "Peringatan", "Untuk ubah, cari terlebih dahulu Kode Barang");
+                RequestContext.getCurrentInstance().update("growl");
+                return;
+            }
+            if (!kodeBarang.equals(mstBarang.getKodeBarang())) {
+                showGrowl(FacesMessage.SEVERITY_WARN, "Peringatan", "Kode Barang tidak dapat diganti");
+                RequestContext.getCurrentInstance().update("growl");
+                return;
+            }
+            log.debug("mstBarang : {}", mstBarang);
+            MstBarang pMstBarang = new MstBarang();
+            pMstBarang = barangRepo.findTop1ByKodeBarang(mstBarang.getKodeBarang());
+            if (pMstBarang != null && !kodeBarang.equals(mstBarang.getKodeBarang())) {
+                showGrowl(FacesMessage.SEVERITY_WARN, "Peringatan", "Barang dengan kode " + pMstBarang.getKodeBarang() + " sudah tersedia");
+                RequestContext.getCurrentInstance().update("growl");
+                return;
+            } else if (pMstBarang.equals(mstBarang)) {
+                showGrowl(FacesMessage.SEVERITY_WARN, "Peringatan", "Tidak ada perubahan data, silahkan ubah data barang");
+                RequestContext.getCurrentInstance().update("growl");
+                return;
+            }
+            mstBarang.setUpdatedAt(new Date());
+            mstBarang.setStatus(MstBarang.Status.ACTIVE);
+            log.debug("mstBarang : {}", mstBarang);
+            barangRepo.save(mstBarang);
+            init();
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil disimpan");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+        } catch (Exception ex) {
+            Logger.getLogger(BarangMBean.class.getName()).log(Level.SEVERE, null, ex);
+            showGrowl(FacesMessage.SEVERITY_ERROR, "Peringatan", "Terjadi kesalahan ubah data");
+            RequestContext.getCurrentInstance().update("growl");
+        }
     }
 
-    public void deleteRecord() throws InterruptedException {
-        MstBarang pKebangsaan = (MstBarang) getRequestParam("mstBarang");
-        pKebangsaan.setStatus(MstBarang.Status.INACTIVE);
-        barangRepo.save(pKebangsaan);
-        init();
-        showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil dihapus");
-        RequestContext.getCurrentInstance().update("idList");
-        RequestContext.getCurrentInstance().update("growl");
+    public void hapus() throws InterruptedException {
+        try {
+            if (!kodeBarang.equals(mstBarang.getKodeBarang())) {
+                showGrowl(FacesMessage.SEVERITY_WARN, "Peringatan", "Kode Barang tidak dapat diganti");
+                RequestContext.getCurrentInstance().update("growl");
+                return;
+            }
+            log.debug("mstBarang : {}", mstBarang);
+            mstBarang.setUpdatedAt(new Date());
+            mstBarang.setStatus(MstBarang.Status.INACTIVE);
+            barangRepo.save(mstBarang);
+            init();
+            showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil dihapus");
+            RequestContext.getCurrentInstance().update("idList");
+            RequestContext.getCurrentInstance().update("growl");
+        } catch (Exception ex) {
+            Logger.getLogger(BarangMBean.class.getName()).log(Level.SEVERE, null, ex);
+            showGrowl(FacesMessage.SEVERITY_ERROR, "Peringatan", "Terjadi kesalahan hapus data");
+            RequestContext.getCurrentInstance().update("growl");
+        }
+    }
+
+    public void tutup() throws IOException {
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/index.xhtml");
+        } catch (IOException ex) {
+            Logger.getLogger(BarangMBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

@@ -7,15 +7,23 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:pu="http://primefaces.org/avalon">
 
-    <div class="layout-menu-container layout-menu-dark">
+    <div class="layout-menu-container" style="text-align: -moz-center; ">
         <div class="nano">
-            <div class="nano-content menu-scroll-content">
-                <h:form>
-                    <pu:menu widgetVar="me" model="#{menuNavMBean.menuModel}"/>
+            <div class="nano-content menu-scroll-content" style="margin-right: 0 !important;">
+                <h:form style="width: 100%; max-width: 100%; text-align: -webkit-center;">
+                    <p:panel class="no-border no-padding" style="width: 1351px;">
+                        <div style="text-align: left">
+                            <pu:menu>
+                                <p:menuitem id="master" value="Master" icon="fa fa-database"/>
+                                <p:menuitem id="transaksi" value="Transaksi" icon="fa fa-shopping-cart"/>
+                                <p:menuitem id="laporan" value="Laporan" icon="fa fa-table"/>
+                                <p:menuitem id="retur" value="Retur" icon="fa fa-undo"/>
+                            </pu:menu>
+                        </div>
+                    </p:panel>
                 </h:form>
             </div>
         </div>
     </div>
-
 
 </ui:composition>

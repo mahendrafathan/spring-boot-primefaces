@@ -24,6 +24,7 @@ import javax.persistence.Basic;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.SequenceGenerator;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,9 +34,7 @@ import lombok.Setter;
  */
 @Entity
 @Table(name = "mst_pelanggan")
-@Getter
-@Setter
-@EntityListeners(AuditingEntityListener.class)
+@Data
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
 public class MstPelanggan {
 
@@ -53,16 +52,16 @@ public class MstPelanggan {
     @Column(name = "PELANGGAN_ID", nullable = false)
     private Integer pelangganId;
 
-    @Column(name = "kd_pelanggan", length = 5)
+    @Column(name = "kd_pelanggan", length = 15)
     private String kodePelanggan;
 
-    @Column(name = "nama_pelanggan", length = 20)
+    @Column(name = "nama_pelanggan", length = 30)
     private String namaPelanggan;
 
     @Column(name = "alamat", length = 50)
     private String alamat;
 
-    @Column(name = "kota", length = 20)
+    @Column(name = "kota", length = 30)
     private String kota;
 
     @Column(name = "telepon", length = 15)
@@ -72,7 +71,7 @@ public class MstPelanggan {
     @CreatedDate
     private Date createdAt;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private Date updatedAt;

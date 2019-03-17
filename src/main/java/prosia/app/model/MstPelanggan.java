@@ -20,6 +20,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -65,7 +66,7 @@ public class MstPelanggan {
     private String kota;
 
     @Column(name = "telepon", length = 15)
-    private Integer telepon;
+    private BigInteger telepon;
 
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate

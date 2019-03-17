@@ -20,6 +20,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -59,7 +60,7 @@ public class MstSupplier {
     private String email;
 
     @Column(name = "telepon", length = 15)
-    private Integer telepon;
+    private BigInteger telepon;
 
     @Column(name = "kota", length = 30)
     private String kota;

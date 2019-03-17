@@ -7,6 +7,7 @@ package prosia.app.web.controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -68,7 +69,7 @@ public class PelangganMBean extends AbstractManagedBean implements InitializingB
                 mstPelanggan.setNamaPelanggan((String) filters.get("namaPelanggan"));
                 mstPelanggan.setAlamat((String) filters.get("alamat"));
                 mstPelanggan.setKota((String) filters.get("kota"));
-                mstPelanggan.setTelepon((Integer) filters.get("telepon"));
+                mstPelanggan.setTelepon((BigInteger) filters.get("telepon"));
                 return pelangganRepo.findAll(whereQuery(), request);
             }
 
@@ -78,7 +79,7 @@ public class PelangganMBean extends AbstractManagedBean implements InitializingB
                 mstPelanggan.setNamaPelanggan((String) filters.get("namaPelanggan"));
                 mstPelanggan.setAlamat((String) filters.get("alamat"));
                 mstPelanggan.setKota((String) filters.get("kota"));
-                mstPelanggan.setTelepon((Integer) filters.get("telepon"));
+                mstPelanggan.setTelepon((BigInteger) filters.get("telepon"));
                 return pelangganRepo.count(whereQuery());
             }
         };

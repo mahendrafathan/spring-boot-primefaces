@@ -52,6 +52,7 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
 
     @Autowired
     private BarangRepo barangRepo;
+    private MstBarang barang;
     private List<MstBarang> listBarang;
 
     @Autowired
@@ -105,6 +106,7 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
     }
 
     public void tambah() {
+        barang = new MstBarang();
         Penjualan penjualanTmp = penjualanRepo.findTop1ByNoFaktur(penjualan.getNoFaktur());
         if (penjualanTmp != null) {
             showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data sudah ada, klik ubah");
@@ -113,7 +115,10 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
             RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
             return;
         }
+        barang = penjualan.getKodeBarang();
+        barang.setStok(penjualan.getStok());
         penjualanRepo.save(penjualan);
+        barangRepo.save(barang);
         init();
         showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil disimpan");
         RequestContext.getCurrentInstance().update("idList");
@@ -141,7 +146,10 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
             RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
             return;
         }
+        barang = penjualan.getKodeBarang();
+        barang.setStok(penjualan.getStok());
         penjualanRepo.save(penjualan);
+        barangRepo.save(barang);
         init();
         showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil disimpan");
         RequestContext.getCurrentInstance().update("idList");
@@ -201,9 +209,32 @@ public class PenjualanMBean extends AbstractManagedBean implements InitializingB
     }
 
     public void totalHarga() {
-        if (penjualan.getHargaSatuan() != null && penjualan.getDiskon() != null && penjualan.getJumlahJual()!= null) {
+        if (penjualan.getStok() != null && penjualan.getJumlahJual() != null) {
+            if (penjualan.getStok() - penjualan.getJumlahJual() < 0) {
+                showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Stock habis");
+                RequestContext.getCurrentInstance().update("growl");
+                penjualan.setJumlahJual(penjualan.getStok());
+                penjualan.setStok(penjualan.getKodeBarang().getStok() - penjualan.getJumlahJual());
+            } else {
+                if (penjualan.getNoFaktur() != null) {
+                    Penjualan penjualanTmp = penjualanRepo.findTop1ByNoFaktur(penjualan.getNoFaktur());
+                    if (penjualan != null) {
+                        if (penjualanTmp.getJumlahJual() > penjualan.getJumlahJual()) {
+                            penjualan.setStok(penjualan.getKodeBarang().getStok() + Math.abs(penjualanTmp.getJumlahJual() - penjualan.getJumlahJual()));
+                        } else {
+                            penjualan.setStok(penjualan.getKodeBarang().getStok() - Math.abs(penjualanTmp.getJumlahJual() - penjualan.getJumlahJual()));
+                        }
+                    } else {
+                        penjualan.setStok(penjualan.getKodeBarang().getStok() - penjualan.getJumlahJual());
+                    }
+                } else {
+                    penjualan.setStok(penjualan.getKodeBarang().getStok() - penjualan.getJumlahJual());
+                }
+
+            }
+        }
+        if (penjualan.getHargaSatuan() != null && penjualan.getDiskon() != null && penjualan.getJumlahJual() != null) {
             penjualan.setTotalHarga((penjualan.getHargaSatuan() * (100 - penjualan.getDiskon()) / 100) * penjualan.getJumlahJual());
-            penjualan.setStok(penjualan.getStok() - penjualan.getJumlahJual());
         }
     }
 }

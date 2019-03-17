@@ -50,6 +50,7 @@ public class PembelianMBean extends AbstractManagedBean implements InitializingB
 
     @Autowired
     private BarangRepo barangRepo;
+    private MstBarang barang;
     private List<MstBarang> listBarang;
 
     @Autowired
@@ -104,6 +105,7 @@ public class PembelianMBean extends AbstractManagedBean implements InitializingB
     }
 
     public void tambah() {
+        barang = new MstBarang();
         Pembelian pembelianTmp = pembelianRepo.findTop1ByNotaBeli(pembelian.getNotaBeli());
         if (pembelianTmp != null) {
             showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data sudah ada, klik ubah");
@@ -112,7 +114,10 @@ public class PembelianMBean extends AbstractManagedBean implements InitializingB
             RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
             return;
         }
+        barang = pembelian.getKodeBarang();
+        barang.setStok(pembelian.getJumlahBeli() + pembelian.getKodeBarang().getStok());
         pembelianRepo.save(pembelian);
+        barangRepo.save(barang);
         init();
         showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil disimpan");
         RequestContext.getCurrentInstance().update("idList");
@@ -132,6 +137,7 @@ public class PembelianMBean extends AbstractManagedBean implements InitializingB
     }
 
     public void ubah() {
+        barang = new MstBarang();
         Pembelian pembelianTmp = pembelianRepo.findTop1ByNotaBeli(pembelian.getNotaBeli());
         if (pembelianTmp == null) {
             showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Cari data terlebih dahulu");
@@ -140,7 +146,14 @@ public class PembelianMBean extends AbstractManagedBean implements InitializingB
             RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
             return;
         }
+        barang = pembelian.getKodeBarang();
+        if (pembelianTmp.getJumlahBeli() >= pembelian.getJumlahBeli()) {
+            barang.setStok(pembelian.getKodeBarang().getStok() - Math.abs(pembelianTmp.getJumlahBeli() - pembelian.getJumlahBeli()));
+        } else {
+            barang.setStok(pembelian.getKodeBarang().getStok() + Math.abs(pembelianTmp.getJumlahBeli() - pembelian.getJumlahBeli()));
+        }
         pembelianRepo.save(pembelian);
+        barangRepo.save(barang);
         init();
         showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data berhasil disimpan");
         RequestContext.getCurrentInstance().update("idList");
@@ -191,13 +204,13 @@ public class PembelianMBean extends AbstractManagedBean implements InitializingB
     }
 
     public void onChangeSupplier() {
-        if (pembelian != null && pembelian.getKodeSupplier()!= null) {
+        if (pembelian != null && pembelian.getKodeSupplier() != null) {
             pembelian.setNamaSupplier(pembelian.getKodeSupplier().getNamaSupplier());
         } else {
             pembelian.setNamaSupplier(null);
         }
     }
-    
+
     public void totalHarga() {
         if (pembelian.getHargaSatuan() != null && pembelian.getDiskon() != null && pembelian.getJumlahBeli() != null) {
             pembelian.setTotalHarga((pembelian.getHargaSatuan() * (100 - pembelian.getDiskon()) / 100) * pembelian.getJumlahBeli());

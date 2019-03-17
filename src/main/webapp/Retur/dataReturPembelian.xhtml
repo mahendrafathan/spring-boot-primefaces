@@ -6,7 +6,9 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
+        <ui:include src="printReturPembelian.xhtml"/>
         <h:form prependId="false">
+            <p:growl id="idGrowl" showDetail="false"/>
             <p:panel header="Data Retur Pembelian" class="card-w-title ui-fluid no-border"
                      style="text-align: -webkit-center;">
                 <p:panelGrid columns="4" columnClasses="ui-grid-col-3,ui-grid-col-2,ui-grid-col-5,ui-grid-col-2"
@@ -22,7 +24,7 @@
                              styleClass="ui-panelgrid-blank form-group">
 
                     <p:outputLabel value="Tanggal Retur"/><p:outputLabel value=":"/>
-                    <p:calendar value="#{returPembelianMBean.returPembelian.tglRetur}"/>
+                    <p:calendar value="#{returPembelianMBean.returPembelian.tglRetur}" pattern="dd-MM-yyyy" required="true"/>
 
                     <p:outputLabel value="Nama Barang"/><p:outputLabel value=":"/>
                     <p:inputText value="#{returPembelianMBean.returPembelian.namaBarang}" style=" text-transform: uppercase;"
@@ -34,6 +36,7 @@
                                      filter="true" filterMatchMode="contains"
                                      converter="PickListConverter"
                                      style="width: 390px; max-width: 100%">
+                        <p:ajax listener="#{returPembelianMBean.onChangeSuplier()}" update="idSupplier"/>
                         <f:selectItem itemValue="#{null}" itemLabel="Pilih Supplier"/>
                         <f:selectItems value="#{returPembelianMBean.listSupplier}"
                                        var="supplier"
@@ -42,18 +45,18 @@
                     </p:selectOneMenu>
 
                     <p:outputLabel value="Nama Supplier"/><p:outputLabel value=":"/>
-                    <p:inputText value="#{returPembelianMBean.returPembelian.namaSupplier}" style=" text-transform: uppercase;"
-                                 required="true" requiredMessage="Nama Supplier tidak boleh kosong"/>
+                    <p:inputText id="idSupplier" value="#{returPembelianMBean.returPembelian.namaSupplier}" style=" text-transform: uppercase;"
+                                 required="true" requiredMessage="Nama Supplier tidak boleh kosong" disabled="true"/>
 
                     <p:outputLabel value="Jumlah Barang"/><p:outputLabel value=":"/>
                     <p:inputText value="#{returPembelianMBean.returPembelian.jumlahBarang}" style=" text-transform: uppercase;"
-                                 required="true" requiredMessage="Jumlah Barang tidak boleh kosong"/>
+                                 required="true" requiredMessage="Jumlah Barang tidak boleh kosong" onkeypress="return isNumberKey(event)"/>
 
                     <p:outputLabel value="Keterangan"/><p:outputLabel value=":"/>
                     <p:inputTextarea value="#{returPembelianMBean.returPembelian.keterangan}" style=" text-transform: uppercase;"
                                      rows="3"/>
                 </p:panelGrid>
-                <p:panelGrid columns="4" layout="grid" class="no-border panelgrid-button-four" columnClasses="ui-g-3,ui-g-3,ui-g-3,ui-g-3">
+                <p:panelGrid columns="5" layout="grid" class="no-border panelgrid-button-four" columnClasses="ui-g-3,ui-g-3,ui-g-2,ui-g-2,ui-g-2">
                     <p:commandButton value="Tambah" class="button-four"
                                      icon="fa fa-plus"
                                      actionListener="#{returPembelianMBean.tambah()}"
@@ -61,6 +64,10 @@
                     <p:commandButton value="Ubah" class="button-four"
                                      icon="fa fa-edit"
                                      actionListener="#{returPembelianMBean.ubah()}"
+                                     update="@form"/>
+                    <p:commandButton value="Print" class="button-four"
+                                     icon="fa fa-print"
+                                     actionListener="#{returPembelianMBean.cetak()}"
                                      update="@form"/>
                     <p:commandButton value="Hapus" class="button-four"
                                      icon="fa fa-trash"
@@ -94,7 +101,9 @@
                     </p:column>
                     <p:column headerText="Tanggal retur"
                               sortBy="#{list.tglRetur}" filterBy="#{list.tglRetur}">
-                        <p:outputLabel value="#{list.tglRetur}"/>
+                        <p:outputLabel value="#{list.tglRetur}">
+                            <f:convertDateTime pattern="dd-MM-yyyy"/>
+                        </p:outputLabel>
                     </p:column>
                     <p:column headerText="Nama Barang"
                               sortBy="#{list.namaBarang}" filterBy="#{list.namaBarang}">

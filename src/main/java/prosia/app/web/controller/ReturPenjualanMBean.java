@@ -25,9 +25,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import prosia.app.model.MstBarang;
 import prosia.app.model.MstPelanggan;
-import prosia.app.model.Pembelian;
-import prosia.app.model.Penjualan;
-import prosia.app.model.ReturPembelian;
 import prosia.app.model.ReturPenjualan;
 import prosia.app.repo.BarangRepo;
 import prosia.app.repo.PelangganRepo;
@@ -105,7 +102,7 @@ public class ReturPenjualanMBean extends AbstractManagedBean implements Initiali
     }
 
     public void tambah() {
-       ReturPenjualan returPenjualanTmp = returPenjualanRepo.findTop1ByNotaJual(returPenjualan.getNotaJual());
+        ReturPenjualan returPenjualanTmp = returPenjualanRepo.findTop1ByNotaJual(returPenjualan.getNotaJual());
         if (returPenjualanTmp != null) {
             showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data sudah ada, klik ubah");
             RequestContext.getCurrentInstance().update("idList");
@@ -120,7 +117,7 @@ public class ReturPenjualanMBean extends AbstractManagedBean implements Initiali
         RequestContext.getCurrentInstance().update("growl");
         RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
     }
-    
+
     public void cari() {
         returPenjualan = returPenjualanRepo.findTop1ByNotaJual(returPenjualan.getNotaJual());
         if (returPenjualan == null) {
@@ -131,6 +128,7 @@ public class ReturPenjualanMBean extends AbstractManagedBean implements Initiali
             RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
         }
     }
+
     public void ubah() {
         ReturPenjualan returPenjualanTmp = returPenjualanRepo.findTop1ByNotaJual(returPenjualan.getNotaJual());
         if (returPenjualanTmp == null) {
@@ -174,8 +172,24 @@ public class ReturPenjualanMBean extends AbstractManagedBean implements Initiali
             RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
             return;
         }
-        RequestContext.getCurrentInstance().execute("PF('showDialocActPenjualan').show())");
+        RequestContext.getCurrentInstance().reset("idDialogCetak");
+        RequestContext.getCurrentInstance().update("idDialogCetak");
+        RequestContext.getCurrentInstance().execute("PF('showDialogCetak').show()");
     }
 
+    public void onChangePelanggan() {
+        if (returPenjualan != null && returPenjualan.getKodePelanggan() != null) {
+            returPenjualan.setNamaPelanggan(returPenjualan.getKodePelanggan().getNamaPelanggan());
+        } else {
+            returPenjualan.setNamaPelanggan(null);
+        }
+    }
 
+    public void onChangeBarang() {
+        if (returPenjualan != null && returPenjualan.getKodeBarang() != null) {
+            returPenjualan.setNamaBarang(returPenjualan.getKodeBarang().getNamaBarang());
+        } else {
+            returPenjualan.setNamaBarang(null);
+        }
+    }
 }

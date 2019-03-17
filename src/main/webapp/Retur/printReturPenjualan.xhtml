@@ -1,0 +1,64 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog showEffect="fade" hideEffect="fade"
+              showHeader="false" closable="false"
+              position="center" id="idDialogCetak"
+              header="Informasi" appendTo="@(body)"  
+              widgetVar="showDialogCetak" 
+              modal="true" height="auto"
+              width="auto"
+              responsive="true" resizable="false">
+
+        <h:form prependId="false">
+            <p:panel style="width: 100%" id="idPanel"
+                     class=" card card-w-title ui-fluid">
+                <p:panelGrid columns="2" class="no-border">
+                    <p:outputLabel value="Nota Jual"/>
+                    <p:outputLabel value=": #{returPenjualanMBean.returPenjualan.notaJual}"/>
+                    <p:outputLabel value="Tanggal Retur"/>
+                    <p:outputLabel value=": #{returPenjualanMBean.returPenjualan.tglRetur}"/>
+                    <p:outputLabel value="Kode Pelanggan"/>
+                    <p:outputLabel value=": #{returPenjualanMBean.returPenjualan.kodePelanggan.kodePelanggan}"/>
+                    <p:outputLabel value="Nama Pelanggan"/>
+                    <p:outputLabel value=": #{returPenjualanMBean.returPenjualan.namaPelanggan}"/>
+                </p:panelGrid>
+                <br/>
+                <br/>
+                <br/>
+                <style type="text/css">
+                    .tg  {border-collapse:collapse;border-spacing:0;}
+                    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                    .tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+                    .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+                </style>
+                <table class="tg">
+                    <tr>
+                        <th class="tg-0pky">Kode Barang</th>
+                        <th class="tg-0pky">Nama Barang</th>
+                        <th class="tg-0pky">Jumlah Barang</th>
+                        <th class="tg-0pky">Keterangan</th>
+                    </tr>
+                    <tr>
+                        <td class="tg-0pky">#{returPenjualanMBean.returPenjualan.kodeBarang.kodeBarang}</td>
+                        <td class="tg-0pky">#{returPenjualanMBean.returPenjualan.namaBarang}</td>
+                        <td class="tg-0pky">#{returPenjualanMBean.returPenjualan.jumlah}</td>
+                        <td class="tg-0pky">#{returPenjualanMBean.returPenjualan.keterangan}</td>
+                    </tr>
+                </table>
+            </p:panel>
+
+            <p:commandButton value="Cetak" style="max-width: 150px; margin-right: 10px" update="@form">
+                <p:printer target="idPanel"/>
+            </p:commandButton>
+            <p:commandButton value="Tutup" style="max-width: 150px; margin-right: 10px" process="@this" update="@form"
+                             onclick="PF('showDialogCetak').hide()"/>
+        </h:form>
+
+    </p:dialog>
+</ui:composition>

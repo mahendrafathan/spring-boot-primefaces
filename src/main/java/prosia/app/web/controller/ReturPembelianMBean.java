@@ -97,7 +97,7 @@ public class ReturPembelianMBean extends AbstractManagedBean implements Initiali
     }
 
     public void tambah() {
-       ReturPembelian returPembelianTmp = returPembelianRepo.findTop1ByNotaBeli(returPembelian.getNotaBeli());
+        ReturPembelian returPembelianTmp = returPembelianRepo.findTop1ByNotaBeli(returPembelian.getNotaBeli());
         if (returPembelianTmp != null) {
             showGrowl(FacesMessage.SEVERITY_INFO, "Informasi", "Data sudah ada, klik ubah");
             RequestContext.getCurrentInstance().update("idList");
@@ -112,7 +112,7 @@ public class ReturPembelianMBean extends AbstractManagedBean implements Initiali
         RequestContext.getCurrentInstance().update("growl");
         RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
     }
-    
+
     public void cari() {
         returPembelian = returPembelianRepo.findTop1ByNotaBeli(returPembelian.getNotaBeli());
         if (returPembelian == null) {
@@ -123,6 +123,7 @@ public class ReturPembelianMBean extends AbstractManagedBean implements Initiali
             RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
         }
     }
+
     public void ubah() {
         ReturPembelian returPembelianTmp = returPembelianRepo.findTop1ByNotaBeli(returPembelian.getNotaBeli());
         if (returPembelianTmp == null) {
@@ -157,6 +158,14 @@ public class ReturPembelianMBean extends AbstractManagedBean implements Initiali
         RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
     }
 
+    public void onChangeSuplier() {
+        if (returPembelian != null && returPembelian.getKodeSupplier() != null) {
+            returPembelian.setNamaSupplier(returPembelian.getKodeSupplier().getNamaSupplier());
+        } else {
+            returPembelian.setNamaSupplier(null);
+        }
+    }
+
     public void cetak() {
         ReturPembelian returPembelianTmp = returPembelianRepo.findTop1ByNotaBeli(returPembelian.getNotaBeli());
         if (returPembelianTmp == null) {
@@ -166,7 +175,9 @@ public class ReturPembelianMBean extends AbstractManagedBean implements Initiali
             RequestContext.getCurrentInstance().execute("PF('showDialocAct').hide()");
             return;
         }
-        RequestContext.getCurrentInstance().execute("PF('showDialocActPenjualan').show())");
+        RequestContext.getCurrentInstance().reset("idDialogCetak");
+        RequestContext.getCurrentInstance().update("idDialogCetak");
+        RequestContext.getCurrentInstance().execute("PF('showDialogCetak').show()");
     }
 
 }

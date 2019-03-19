@@ -131,7 +131,7 @@ public class LaporanMBean extends AbstractManagedBean implements InitializingBea
         } else if (laporan.equals("inventory")) {
             listBarang = barangRepo.findAllByOrderByNamaBarangAsc();
         }
-        System.out.println("listPembelian = " + listPembelian);
+//        System.out.println("listPembelian = " + listPembelian);
         RequestContext.getCurrentInstance().reset("idDialogCetak");
         RequestContext.getCurrentInstance().update("idDialogCetak");
         RequestContext.getCurrentInstance().execute("PF('showDialogCetak').show()");

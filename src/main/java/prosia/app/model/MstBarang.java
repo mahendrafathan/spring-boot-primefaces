@@ -28,7 +28,7 @@ import lombok.Data;
  *
  */
 @Entity
-@Table(name = "mst_barang", catalog = "", schema = "inventory_2")
+@Table(name = "mst_barang")
 @Data
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
 public class MstBarang {

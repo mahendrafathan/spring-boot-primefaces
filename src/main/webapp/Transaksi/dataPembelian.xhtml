@@ -80,15 +80,14 @@
                             <p:ajax event="blur" listener="#{pembelianMBean.totalHarga()}" update="total"/>
                         </p:inputText>
 
-                        <p:outputLabel value="Total Harga"/><p:outputLabel value=":"/>
-                        <p:inputText id="total" value="#{pembelianMBean.pembelian.totalHarga}" style=" text-transform: uppercase;"
-                                     required="true" requiredMessage="Total Harga Jual tidak boleh kosong" onkeypress="return isNumberKey(event)"/>
-
                         <p:outputLabel value="Diskon"/><p:outputLabel value=":"/>
                         <p:inputText value="#{pembelianMBean.pembelian.diskon}" style=" text-transform: uppercase;"
                                      required="true" requiredMessage="Diskon tidak boleh kosong" onkeypress="return isNumberKey(event)" maxlength="99">
                             <p:ajax event="blur" listener="#{pembelianMBean.totalHarga()}" update="total"/>
                         </p:inputText>
+                        <p:outputLabel value="Total Harga"/><p:outputLabel value=":"/>
+                        <p:inputText id="total" value="#{pembelianMBean.pembelian.totalHarga}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Total Harga Jual tidak boleh kosong" onkeypress="return isNumberKey(event)"/>
 
                     </p:panelGrid>
                 </p:panelGrid>
@@ -165,11 +164,11 @@
                         <p:outputLabel value="#{list.totalHarga}"/>
                     </p:column>
                 </p:dataTable>
-                <h3>Export Page Data Only</h3>
+<!--                <h3>Export Page Data Only</h3>
                 <h:commandLink immediate="true">
                     <p:graphicImage name="/images/logo-pt-air.jpeg" />
                     <p:dataExporter type="pdf" target="idList" fileName="cars"/>
-                </h:commandLink>
+                </h:commandLink>-->
             </p:panel>
         </h:form>
     </ui:define>

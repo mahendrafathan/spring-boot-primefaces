@@ -88,15 +88,14 @@
                         <p:inputText id="idStok" value="#{penjualanMBean.penjualan.stok}" style=" text-transform: uppercase;"
                                      required="true" requiredMessage="Stok tidak boleh kosong" disabled="true"/>
 
-                        <p:outputLabel value="Total Harga"/><p:outputLabel value=":"/>
-                        <p:inputText id="total" value="#{penjualanMBean.penjualan.totalHarga}" style=" text-transform: uppercase;"
-                                     required="true" requiredMessage="Total Harga tidak boleh kosong" disabled="true"/>
-
                         <p:outputLabel value="Diskon"/><p:outputLabel value=":"/>
                         <p:inputText value="#{penjualanMBean.penjualan.diskon}" style=" text-transform: uppercase;"
                                      required="true" requiredMessage="Diskon tidak boleh kosong" onkeypress="return isNumberKey(event)">
                             <p:ajax event="blur" listener="#{penjualanMBean.totalHarga()}" update="total,idStok" />
                         </p:inputText>
+                        <p:outputLabel value="Total Harga"/><p:outputLabel value=":"/>
+                        <p:inputText id="total" value="#{penjualanMBean.penjualan.totalHarga}" style=" text-transform: uppercase;"
+                                     required="true" requiredMessage="Total Harga tidak boleh kosong" disabled="true"/>
 
                     </p:panelGrid>
                 </p:panelGrid>

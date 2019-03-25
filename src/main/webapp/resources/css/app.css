@@ -2,6 +2,14 @@ body {
     color: #000000 !important;
 }
 
+.login-body {
+    background-color: #f3de2b;
+}
+
+.login-image {
+    background-image: url(/resources/images/hop-hop.jpeg);
+}
+
 .ui-tree-selectable .ui-state-highlight,
 .ui-tree-selectable .ui-state-highlight a {
     color: #ffffff !important;

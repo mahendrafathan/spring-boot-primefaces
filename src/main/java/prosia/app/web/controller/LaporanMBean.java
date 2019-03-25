@@ -19,9 +19,13 @@ import org.springframework.stereotype.Controller;
 import prosia.app.model.MstBarang;
 import prosia.app.model.Pembelian;
 import prosia.app.model.Penjualan;
+import prosia.app.model.ReturPembelian;
+import prosia.app.model.ReturPenjualan;
 import prosia.app.repo.BarangRepo;
 import prosia.app.repo.PembelianRepo;
 import prosia.app.repo.PenjualanRepo;
+import prosia.app.repo.ReturPembelianRepo;
+import prosia.app.repo.ReturPenjualanRepo;
 import prosia.app.web.util.AbstractManagedBean;
 
 /**
@@ -44,6 +48,16 @@ public class LaporanMBean extends AbstractManagedBean implements InitializingBea
     private List<Penjualan> listPenjualan;
 
     @Autowired
+    private ReturPembelianRepo returPembelianRepo;
+    private ReturPembelian returPembelian;
+    private List<ReturPembelian> listReturPembelian;
+
+    @Autowired
+    private ReturPenjualanRepo returPenjualanRepo;
+    private ReturPenjualan returPenjualan;
+    private List<ReturPenjualan> listReturPenjualan;
+
+    @Autowired
     private BarangRepo barangRepo;
     private List<MstBarang> listBarang;
     private MstBarang mstBarang;
@@ -56,7 +70,8 @@ public class LaporanMBean extends AbstractManagedBean implements InitializingBea
     private Integer bulan;
 
     private String periode;
-    private Date tanggal;
+    private Date tglAwal;
+    private Date tglAkhir;
 
     public void init() {
         pembelian = new Pembelian();
@@ -75,11 +90,11 @@ public class LaporanMBean extends AbstractManagedBean implements InitializingBea
         }
     }
 
-    public void onChangePeriode() {
-        System.out.println("periode = " + periode);
-        tanggal = periode.equals("hari") ? tanggal : null;
-        bulan = periode.equals("bulan") ? bulan : null;
-    }
+//    public void onChangePeriode() {
+//        System.out.println("periode = " + periode);
+//        tanggal = periode.equals("hari") ? tanggal : null;
+//        bulan = periode.equals("bulan") ? bulan : null;
+//    }
 
     public void onChangeTahun() {
         Date today = new Date();
@@ -109,25 +124,13 @@ public class LaporanMBean extends AbstractManagedBean implements InitializingBea
     public void tampilkan() {
         String laporan = (String) getRequestParam("laporan");
         if (laporan.equals("pembelian")) {
-            if (periode.equals("hari")) {
-                listPembelian = pembelianRepo.listPembelianHari(tanggal);
-            } else {
-                bulan += 1;
-                System.out.println("bulan = " + bulan);
-                listPembelian = pembelianRepo.listPembelianBulan(bulan.toString());
-            }
+            listPembelian = pembelianRepo.listPembelian(tglAwal, tglAkhir);
         } else if (laporan.equals("penjualan")) {
-            if (periode.equals("hari")) {
-                listPenjualan = penjualanRepo.listPenjualanHari(tanggal);
-            } else {
-                bulan += 1;
-                System.out.println("bulan = " + bulan);
-                listPenjualan = penjualanRepo.listPenjualanBulan(bulan.toString());
-            }
+            listPenjualan = penjualanRepo.listPenjualan(tglAwal, tglAkhir);
         } else if (laporan.equals("returpembelian")) {
-
+            listReturPembelian = returPembelianRepo.listReturPembelian(tglAwal, tglAkhir);
         } else if (laporan.equals("returpenjualan")) {
-
+            listReturPenjualan = returPenjualanRepo.listReturPenjualan(tglAwal, tglAkhir);
         } else if (laporan.equals("inventory")) {
             listBarang = barangRepo.findAllByOrderByNamaBarangAsc();
         }

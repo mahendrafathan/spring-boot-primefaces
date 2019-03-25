@@ -10,57 +10,17 @@
             <p:growl id="idGrowl" showDetail="false"/>
             <p:panel header="Laporan Penjualan"
                      style="width: 100%; height: 100%">
-                <p:panel class="no-border" style="width: 50%">
-                    <p:panelGrid columns="2" columnClasses="ui-g-4, ui-g-8" style="width: 100%">
-                        <p:outputLabel value="Periode Laporan" class="required-note"/>
-                        <p:selectOneRadio value="#{laporanMBean.periode}"
-                                          required="true" requiredMessage="Periode Laporan harap dipilih">
-                            <p:ajax update="@form" listener="#{laporanMBean.onChangePeriode()}"/>
-                            <f:selectItem itemLabel="Bulan" itemValue="bulan" />
-                            <f:selectItem itemLabel="Hari" itemValue="hari"/>
-                        </p:selectOneRadio>
-                        <p:outputLabel value="Tahun" rendered="#{laporanMBean.periode eq 'bulan' ? true : false}"/>
-                        <p:selectOneMenu required="true" requiredMessage="Tahun harap dipilih"
-                                         value="#{laporanMBean.tahun}"
-                                         converter="PickListConverter"
-                                         style="width: 390px; max-width: 100%"
-                                         rendered="#{laporanMBean.periode eq 'bulan' ? true : false}">
-                            <p:ajax listener="#{laporanMBean.onChangeTahun()}" update="idBulan"/>
-                            <f:selectItem itemValue="#{null}" itemLabel="PILIH TAHUN"/>
-                            <f:selectItems value="#{laporanMBean.listTahun}"
-                                           var="year"
-                                           itemLabel="#{year.tahun}"
-                                           itemValue="#{year.tahun}"/>
-                        </p:selectOneMenu>
-                        <p:outputLabel value="Bulan" rendered="#{laporanMBean.periode eq 'bulan' ? true : false}"/>
-                        <p:selectOneMenu id="idBulan" required="true" requiredMessage="Bulan harap dipilih"
-                                         value="#{laporanMBean.bulan}"
-                                         converter="PickListConverter"
-                                         style="width: 390px; max-width: 100%"
-                                         rendered="#{laporanMBean.periode eq 'bulan' ? true : false}">
-                            <f:selectItem itemValue="#{null}" itemLabel="PILIH BULAN"/>
-                            <f:selectItems value="#{laporanMBean.listBulan}"
-                                           var="month"
-                                           itemLabel="#{month.bulan eq '0' ? 'JANUARI' : 
-                                                        month.bulan eq '1' ? 'FEBRUARI' : 
-                                                        month.bulan eq '2' ? 'MARET' :
-                                                        month.bulan eq '3' ? 'APRIL' : 
-                                                        month.bulan eq '4' ? 'MEI' : 
-                                                        month.bulan eq '5' ? 'JUNI' : 
-                                                        month.bulan eq '6' ? 'JULI' : 
-                                                        month.bulan eq '7' ? 'AGUSTUS':
-                                                        month.bulan eq '8' ? 'SEPTEMBER' :
-                                                        month.bulan eq '9' ? 'OKTOBER' : 
-                                                        month.bulan eq '10' ? 'NOVEMBER' : 
-                                                        month.bulan eq '11' ? 'DESEMBER' : null}"
-                                           itemValue="#{month.bulan}"/>
-                        </p:selectOneMenu>
-                        <p:outputLabel value="Hari" class="required-note"
-                                       rendered="#{laporanMBean.periode eq 'hari' ? true : false}"/>
-                        <p:calendar value="#{laporanMBean.tanggal}" maxdate="#{now}" yearRange="c-80:c"
+                <p:panel class="no-border" style="width: 80%">
+                    <p:outputLabel value="Periode Laporan:" class="required-note"/>
+                    <p:panelGrid columns="4" columnClasses="ui-g-2, ui-g-4, ui-g-2, ui-g-4" style="width: 100%; margin-top: 2%;">
+                        <p:outputLabel value="Tanggal Awal" class="required-note"/>
+                        <p:calendar value="#{laporanMBean.tglAwal}" maxdate="#{now}" yearRange="c-80:c"
                                     navigator="true" pattern="dd-MM-yyyy" showOn="button" required="true" mask="true"
-                                    requiredMessage="Hari harap dipilih" style="width: auto"
-                                    rendered="#{laporanMBean.periode eq 'hari' ? true : false}"/>
+                                    requiredMessage="Hari harap dipilih" style="width: auto"/>
+                        <p:outputLabel value="Tanggal Akhir" class="required-note"/>
+                        <p:calendar value="#{laporanMBean.tglAkhir}" maxdate="#{now}" yearRange="c-80:c"
+                                    navigator="true" pattern="dd-MM-yyyy" showOn="button" required="true" mask="true"
+                                    requiredMessage="Hari harap dipilih" style="width: auto"/>
                     </p:panelGrid>
                     <p:separator/>
                     <p:commandButton value="Tampilkan" actionListener="#{laporanMBean.tampilkan()}"
@@ -88,27 +48,14 @@
                         <h1>PT. MATA AIR BOGA LESTARI</h1>
                     </div>
                     <p:separator/>
-                    <p:panel class="no-border" style="text-align: center"
-                             rendered="#{laporanMBean.periode eq 'bulan' ? true : false}">
-                        <p:outputLabel value="Bulan : " style="font-size: 14px; font-weight: bold"/>
-                        <p:outputLabel value="#{laporanMBean.bulan eq '1' ? 'Januari' 
-                                                : laporanMBean.bulan eq '2' ? 'Februari' 
-                                                : laporanMBean.bulan eq '3' ? 'Maret' 
-                                                : laporanMBean.bulan eq '4' ? 'April' 
-                                                : laporanMBean.bulan eq '5' ? 'Mei' 
-                                                : laporanMBean.bulan eq '6' ? 'Juni' 
-                                                : laporanMBean.bulan eq '7' ? 'Juli' 
-                                                : laporanMBean.bulan eq '8' ? 'Agustus' 
-                                                : laporanMBean.bulan eq '9' ? 'September' 
-                                                : laporanMBean.bulan eq '10' ? 'Oktober' 
-                                                : laporanMBean.bulan eq '11' ? 'November' 
-                                                : 'Desember'}"
-                                       style="font-size: 14px; font-weight: bold"/>
-                    </p:panel>
-                    <p:panel class="no-border" style="text-align: center"
-                             rendered="#{laporanMBean.periode eq 'hari' ? true : false}">
-                        <p:outputLabel value="Tanggal : " style="font-size: 14px; font-weight: bold"/>
-                        <p:outputLabel value="#{laporanMBean.tanggal}" 
+                    <p:panel class="no-border" style="text-align: center">
+                        <p:outputLabel value="Periode : " style="font-size: 14px; font-weight: bold"/>
+                        <p:outputLabel value="#{laporanMBean.tglAwal}" 
+                                       style="font-size: 14px; font-weight: bold">
+                            <f:convertDateTime type="date" dateStyle="long" locale="in_ID"/>  
+                        </p:outputLabel>
+                        <p:outputLabel value=" s/d " style="font-size: 14px; font-weight: bold"/>
+                        <p:outputLabel value="#{laporanMBean.tglAkhir}" 
                                        style="font-size: 14px; font-weight: bold">
                             <f:convertDateTime type="date" dateStyle="long" locale="in_ID"/>  
                         </p:outputLabel>
@@ -151,10 +98,10 @@
                             </c:forEach>
                         </table>
                     </p:panel>
-                    <div class="no-border" style="padding: 0; text-align: center; width: 100%">
-                        <p:outputLabel value="Manajer Personalia"/>
+                    <div class="no-border" style="padding: 0; text-align: right;">
+                        <p:outputLabel value="Manajer Personalia" style="margin-right: 42px"/>
                         <br/><br/><br/><br/><br/>
-                        <p:outputLabel value="Timotius Abineno"/>
+                        <p:outputLabel value="Timotius Abineno" style="margin-right: 52px"/>
                     </div>
                 </p:panel>
                 <p:panel class="no-border" style="width: 100%; text-align: center">

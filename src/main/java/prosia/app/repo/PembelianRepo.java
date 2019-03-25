@@ -25,6 +25,6 @@ public interface PembelianRepo extends JpaRepository<Pembelian, Integer>, JpaSpe
     @Query(value = "SELECT * FROM pembelian p WHERE MONTH(p.tgl_beli) = ?1", nativeQuery = true)
     public List<Pembelian> listPembelianBulan(String bulan);
 
-    @Query(value = "SELECT * FROM pembelian p where DATE_FORMAT(p.tgl_beli,'%d/%m/%Y') =  DATE_FORMAT(?1,'%d/%m/%Y')", nativeQuery = true)
-    public List<Pembelian> listPembelianHari(Date tanggal);
+    @Query(value = "SELECT * FROM pembelian p where DATE_FORMAT(p.tgl_beli,'%d/%m/%Y') between DATE_FORMAT(?1,'%d/%m/%Y') and DATE_FORMAT(?2,'%d/%m/%Y')", nativeQuery = true)
+    public List<Pembelian> listPembelian(Date tglAwal, Date tglAkhir);
 }

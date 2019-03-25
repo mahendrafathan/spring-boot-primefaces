@@ -25,6 +25,6 @@ public interface PenjualanRepo extends JpaRepository<Penjualan, Integer>, JpaSpe
     @Query(value = "SELECT * FROM penjualan p WHERE MONTH(p.tgl_jual) = ?1", nativeQuery = true)
     public List<Penjualan> listPenjualanBulan(String bulan);
 
-    @Query(value = "SELECT * FROM penjualan p where DATE_FORMAT(p.tgl_jual,'%d/%m/%Y') =  DATE_FORMAT(?1,'%d/%m/%Y')", nativeQuery = true)
-    public List<Penjualan> listPenjualanHari(Date tanggal);
+    @Query(value = "SELECT * FROM penjualan p where DATE_FORMAT(p.tgl_jual,'%d/%m/%Y') between DATE_FORMAT(?1,'%d/%m/%Y') and DATE_FORMAT(?2,'%d/%m/%Y')", nativeQuery = true)
+    public List<Penjualan> listPenjualan(Date tglAwal, Date tglAkhir);
 }

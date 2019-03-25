@@ -54,7 +54,7 @@ public class ReturPenjualan {
     @Column(name = "tgl_retur")
     private Date tglRetur;
 
-    @JoinColumn(name = "barang_id", referencedColumnName = "barang_id")
+    @JoinColumn(name = "kd_barang", referencedColumnName = "kd_barang")
     @ManyToOne
     private MstBarang kodeBarang;
 
